@@ -1,0 +1,66 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en">
+ <!--<![endif]-->
+<!-- BEGIN HEAD -->
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,initial-scale=1.0,user-scalable=no">
+    @*<meta name="apple-mobile-web-app-capable" content="yes" />*@
+    <title>管理员登录</title>
+    <link href="/Content/style.css" rel="stylesheet" />
+    <script src="/Scripts/jquery-1.9.1.min.js"></script>
+    <script src="/Scripts/jquery.unobtrusive-ajax.js"></script>
+    <script type="text/javascript">
+        function LoginSystem(data) {
+            if(data != null)
+            {
+                if (data.split('|')[0] == "1")
+                {
+                    window.location.href = "/Home/Index";
+                }
+                else
+                {
+                    alert(data.split('|')[1]);
+                    return;
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="loginbody">
+    @using (Ajax.BeginForm("CheckUserLogin", "Login", new AjaxOptions { OnSuccess = "LoginSystem", HttpMethod="POST" }, new { ID = "LoginForm" }))
+{
+    <div style="width:100%; height:100%; min-width:300px; min-height:260px;"></div>
+        <div class="login-wrap">
+            <div class="login-logo">LOGO</div>
+            <div class="login-form">
+                <div class="col">
+                    @Html.TextBox("username", string.Empty, new { @class = "login-input", placeholder = "管理员账号", data_val_required = "账号不能为空", data_val = "true" })
+                    <label class="icon user" for="txtUserName"></label>
+                </div>
+                <div class="col">
+                    @Html.Password("password", string.Empty, new { @class = "login-input", placeholder = "管理员密码", data_val_required = "密码不能为空", data_val = "true" })
+                    <label class="icon pwd" for="txtPassword"></label>
+                </div>
+                <div class="col">
+                    <button type="submit" class="login-btn">
+                        登 录 <i class="m-icon-swapright m-icon-white"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="login-tips"><i></i><p id="msgtip">请输入用户名和密码</p></div>
+        </div>
+        <div class="copy-right">
+            <p>版权所有 ABCD Copyright © 2016 - 2016 Inc. All Rights Reserved.</p>
+        </div>
+    }
+</body>
+</html>
