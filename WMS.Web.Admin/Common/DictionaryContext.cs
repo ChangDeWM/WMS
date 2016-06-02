@@ -5,7 +5,7 @@ using System.Web;
 
 namespace WMS.Web.Admin.Common
 { 
-    public class DictionaryContext
+    public class DictionaryContext 
     {
         #region 操作权限菜单 配合枚举执行
         /// <summary>

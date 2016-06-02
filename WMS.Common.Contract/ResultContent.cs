@@ -8,7 +8,7 @@ namespace WMS.Common.Contract
     public interface IResultContent { }
     /// <summary>
     /// 返回内容
-    /// </summary>
+    /// </summary> 
     public class ResultContent : IResultContent
     {
         public Boolean Succeed { get; set; }

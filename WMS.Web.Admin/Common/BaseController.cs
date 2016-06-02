@@ -9,7 +9,7 @@ using WMS.Common.Web;
 using WMS.Account.Contract;
 using WMS.Core.Log;
  
-namespace WMS.Web.Admin.Common
+namespace WMS.Web.Admin.Common 
 {
     public abstract class BaseController : ControllerBase
     {
