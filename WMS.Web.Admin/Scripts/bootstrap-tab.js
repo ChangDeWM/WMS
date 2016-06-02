@@ -145,6 +145,10 @@ function closeall() {
         $("#tab_tab_" + tid).remove();
         $("#tab_" + tid).remove();
     }
+    var optionsList = JSON.parse($.cookie("wms_cookie_nav_zj"));
+    optionsList.splice(0, optionsList.length);
+    $.cookie('wms_cookie_nav_zj', JSON.stringify(optionsList));
+
     $('#tabIndex').addClass('active');
     $('#Index').addClass('active');
 };
