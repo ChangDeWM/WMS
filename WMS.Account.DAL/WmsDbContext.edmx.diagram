@@ -6,7 +6,9 @@
     <edmx:Diagrams>
       <Diagram DiagramId="f7b19edf291346d1836dd662a750fb97" Name="Diagram1">
         <EntityTypeShape EntityType="WmsDbModel.ActionInfo" Width="1.5" PointX="0.75" PointY="0.75" />
-        <EntityTypeShape EntityType="WmsDbModel.MenuInfo" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="WmsDbModel.Department" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="WmsDbModel.Enterprise" Width="1.5" PointX="0.75" PointY="3.75" />
+        <EntityTypeShape EntityType="WmsDbModel.MenuInfo" Width="1.5" PointX="2.75" PointY="3.75" />
         <EntityTypeShape EntityType="WmsDbModel.UserInfo" Width="1.5" PointX="4.75" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>

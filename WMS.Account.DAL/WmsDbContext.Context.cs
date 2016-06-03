@@ -26,6 +26,8 @@ namespace WMS.Account.DAL
         }
     
         public virtual DbSet<ActionInfo> ActionInfo { get; set; }
+        public virtual DbSet<Department> Department { get; set; }
+        public virtual DbSet<Enterprise> Enterprise { get; set; }
         public virtual DbSet<MenuInfo> MenuInfo { get; set; }
         public virtual DbSet<UserInfo> UserInfo { get; set; }
     }

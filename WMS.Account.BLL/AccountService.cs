@@ -133,19 +133,30 @@ namespace WMS.Account.BLL
                                                   from en in JoinedEmpEnterprise.DefaultIfEmpty()
                                                   join dpt in dbContext.Department on n.DepId equals dpt.Id into JoinedEmpDept
                                                   from dpt in JoinedEmpDept.DefaultIfEmpty()
+                                                  where !n.Status.Equals(1)
                                                   select new UserClassInfo
                                                   {
+                                                      DepartmentName = dpt != null ? dpt.DepName : null,
+                                                      EnterpriseName = en != null ? en.EnterpriseName : null,
+                                                      DepartmentId = n.DepId,
+                                                      EnterpriseId = n.EnterpriseId,
+                                                      LoginAccount = n.UserAccount,
+                                                      ManageLevel = n.ManageLevel,
+                                                      NickName = n.NickName,
+                                                      PostId = n.PostId,
+                                                      PostName = "",
+                                                      Remarks = n.Remarks,
+                                                      Status = n.Status,
+                                                      UserId = n.Id,
+                                                      Mobile = n.Telephone
+                                                  };
+                if (!string.IsNullOrEmpty(request.LoginName))
+                    users = users.Where(u => u.LoginAccount.Contains(request.LoginName));
 
-                                                  }
+                if (!string.IsNullOrEmpty(request.Mobile))
+                    users = users.Where(u => u.Mobile.Contains(request.Mobile));
 
-                //if (!string.IsNullOrEmpty(request.LoginName))
-                //    users = users.Where(u => u.LoginName.Contains(request.LoginName));
-
-                //if (!string.IsNullOrEmpty(request.Mobile))
-                //    users = users.Where(u => u.Mobile.Contains(request.Mobile));
-
-                //return users.OrderByDescending(u => u.ID).ToPagedList(request.PageIndex, request.PageSize);
-                return new List<UserClassInfo>();
+                return users.OrderByDescending(u => u.UserId).ToPagedList(request.PageIndex, request.PageSize);
             }
         }
 

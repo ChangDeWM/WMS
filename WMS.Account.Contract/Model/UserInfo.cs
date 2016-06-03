@@ -55,5 +55,7 @@ namespace WMS.Account.Contract
         public int ManageLevel { set; get; }
         public int Status { set; get; }
         public string Remarks { set; get; }
+
+        public string Mobile { set; get; }
     }
 }

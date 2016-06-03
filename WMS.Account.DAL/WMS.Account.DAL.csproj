@@ -51,6 +51,12 @@
     <Compile Include="ActionInfo.cs">
       <DependentUpon>WmsDbContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Department.cs">
+      <DependentUpon>WmsDbContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Enterprise.cs">
+      <DependentUpon>WmsDbContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="MenuInfo.cs">
       <DependentUpon>WmsDbContext.tt</DependentUpon>
     </Compile>

@@ -12,19 +12,15 @@ namespace WMS.Account.DAL
     using System;
     using System.Collections.Generic;
     
-    public partial class UserInfo
+    public partial class Enterprise
     {
         public int Id { get; set; }
-        public string UserAccount { get; set; }
-        public string Password { get; set; }
-        public string UserName { get; set; }
-        public string NickName { get; set; }
-        public string Telephone { get; set; }
-        public int EnterpriseId { get; set; }
-        public int DepId { get; set; }
-        public int PostId { get; set; }
-        public string Remarks { get; set; }
+        public string EnterpriseName { get; set; }
+        public string EnterpriseAddress { get; set; }
+        public string ContactUser { get; set; }
+        public string ContactTel { get; set; }
         public int Status { get; set; }
-        public int ManageLevel { get; set; }
+        public System.DateTime CreateTime { get; set; }
+        public string CreateUser { get; set; }
     }
 }
