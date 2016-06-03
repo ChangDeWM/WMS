@@ -35,7 +35,7 @@ namespace WMS.Web.Admin.Common
                 return new Operater()
                 {
                     Name = this.LoginInfo == null ? "" : this.LoginInfo.LoginAccount,
-                    Token = this.LoginInfo == null ? Guid.Empty : this.LoginInfo.LoginToken,
+                    Token = this.LoginInfo == null ? "" : this.LoginInfo.LoginToken,
                     UserId = this.LoginInfo == null ? 0 : this.LoginInfo.UserId,
                     Time = DateTime.Now,
                     IP = Fetch.UserIp

@@ -128,7 +128,15 @@ namespace WMS.Account.BLL
 
             using (var dbContext = new WmsDbContext())
             {
-                //IQueryable<User> users = dbContext.Users.Include("Roles");
+                IQueryable<UserClassInfo> users = from n in dbContext.UserInfo
+                                                  join en in dbContext.Enterprise on n.EnterpriseId equals en.Id into JoinedEmpEnterprise
+                                                  from en in JoinedEmpEnterprise.DefaultIfEmpty()
+                                                  join dpt in dbContext.Department on n.DepId equals dpt.Id into JoinedEmpDept
+                                                  from dpt in JoinedEmpDept.DefaultIfEmpty()
+                                                  select new UserClassInfo
+                                                  {
+
+                                                  }
 
                 //if (!string.IsNullOrEmpty(request.LoginName))
                 //    users = users.Where(u => u.LoginName.Contains(request.LoginName));

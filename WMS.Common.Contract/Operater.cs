@@ -13,7 +13,7 @@ namespace WMS.Common.Contract
 
         public string IP { get; set; }
         public DateTime Time { get; set; }
-        public Guid Token { get; set; }
+        public string Token { get; set; }
         public int UserId { get; set; }
         public string Method { get; set; }
     }

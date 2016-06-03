@@ -49,9 +49,9 @@ namespace WMS.Web
         {
             RedisCache.Remove(String.Format("Login_{0}_{1}", userId, loginAccount));
         }
-        public static bool SetUserInfoByRedis(string security_key, UserClassInfo userClassInfo)
+        public static bool SetUserInfoByRedis(string guid_str, UserClassInfo userClassInfo)
         {
-            return RedisCache.Set<UserClassInfo>(String.Format("User_{0}", security_key), userClassInfo, 60 * 60 * 2);
+            return RedisCache.Set<UserClassInfo>(String.Format("User_{0}", guid_str), userClassInfo, 60 * 60 * 2);
         }
         /// <summary>
         /// 根据Sec_Key 获取Cache UserInfo
@@ -59,14 +59,14 @@ namespace WMS.Web
         /// <param name="security_key"></param>
         /// <param name="chcheInfo"></param>
         /// <returns></returns>
-        public static UserClassInfo GetUserInfoByRedis(string security_key)
+        public static UserClassInfo GetUserInfoByRedis(string guid_str)
         {
-            return String.IsNullOrEmpty(security_key)?null:RedisCache.Get<UserClassInfo>(String.Format("User_{0}",security_key));
+            return String.IsNullOrEmpty(guid_str) ? null : RedisCache.Get<UserClassInfo>(String.Format("User_{0}", guid_str));
         }
 
-        public static LoginInfo GetUserLoginInfo(string security_key)
+        public static LoginInfo GetUserLoginInfo(string guid_str)
         {
-            var user = RedisCache.Get<UserClassInfo>(String.Format("User_{0}", security_key));
+            var user = RedisCache.Get<UserClassInfo>(String.Format("User_{0}", guid_str));
             if (user != null)
             {
                 return RedisCache.Get<LoginInfo>(String.Format("Login_{0}_{1}", user.UserId, user.LoginAccount));

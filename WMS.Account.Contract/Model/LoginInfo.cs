@@ -14,19 +14,19 @@ namespace WMS.Account.Contract
         public LoginInfo()
         {
             LastAccessTime = DateTime.Now;
-            LoginToken = Guid.NewGuid();
+            LoginToken = Guid.NewGuid().ToString("N");
         }
 
         public LoginInfo(int userId, string loginAccount)
         {
             LastAccessTime = DateTime.Now;
-            LoginToken = Guid.NewGuid();
+            LoginToken = Guid.NewGuid().ToString("N");
 
             UserId = userId;
             LoginAccount = loginAccount;
         }
 
-        public Guid LoginToken { get; set; }
+        public string LoginToken { get; set; }
         public DateTime LastAccessTime { get; set; }
         public int UserId { get; set; }
         public string LoginAccount { get; set; }

@@ -94,20 +94,18 @@
                     </small>
                 </a><!-- /.brand -->
             </div><!-- /.navbar-header -->
-
             <div class="navbar-header pull-right" role="navigation">
                 <ul class="nav ace-nav">
                     <li class="light-blue">
                         <a data-toggle="dropdown" href="#" class="dropdown-toggle">
                             <img class="nav-user-photo" src="/assets/avatars/user.jpg" alt="张三头像" />
                             <span class="user-info" style="text-align:center;">
-                                常德自来水
-                                <small>操作员 张三三</small>
+                                @ViewData["User_EnterpriseName"]
+                                <small>@ViewData["User_DepartmentName"]  @ViewData["User_NickName"]</small>
                             </span>
 
                             <i class="icon-caret-down"></i>
                         </a>
-
                         <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
                             <li>
                                 <a href="#">

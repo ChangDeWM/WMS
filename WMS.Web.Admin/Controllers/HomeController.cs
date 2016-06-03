@@ -13,7 +13,17 @@ namespace WMS.Web.Admin.Controllers
     {
         public ActionResult Index()
         {
-            ViewData["userAccount"] = this.LoginInfo.LoginAccount;
+            var user =  UserContext.GetUserInfoByRedis(this.LoginInfo.LoginToken);
+            if(user != null)
+            {
+                ViewData["User_EnterpriseName"] = user.EnterpriseName;
+                ViewData["User_DepartmentName"] = user.DepartmentName;
+                ViewData["User_NickName"] = user.NickName;
+            }
+            else
+            {
+                RedirectToAction("Index", "Login");
+            }
             return View(); 
         }
 

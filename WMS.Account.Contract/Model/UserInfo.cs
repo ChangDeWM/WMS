@@ -13,7 +13,6 @@ namespace WMS.Account.Contract
         public string NickName { set; get; }
         public string Password { set; get; }
         public string MenuString { get; set; }
-
         public string ActionString { get; set; }
         public List<WMS.Account.Contract.MenuCollection> MenuList
         {
@@ -29,7 +28,6 @@ namespace WMS.Account.Contract
                 MenuString = JsonConvert.SerializeObject(value as List<MenuCollection>);
             }
         }
-
         public List<WMS.Account.Contract.ActionCollection> ActionList
         {
             get
@@ -45,5 +43,17 @@ namespace WMS.Account.Contract
             }
         } 
         //加入其它用户表相关数据
+        public int? EnterpriseId { set; get; }
+        public string EnterpriseName { set; get; }
+        public int? DepartmentId { set; get; }
+        public string DepartmentName { set; get; }
+        public int? PostId { set; get; }
+        public string PostName { set; get; }
+        /// <summary>
+        /// 管理数据级别 默认9最低
+        /// </summary>
+        public int ManageLevel { set; get; }
+        public int Status { set; get; }
+        public string Remarks { set; get; }
     }
 }

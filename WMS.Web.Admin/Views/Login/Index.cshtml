@@ -17,20 +17,46 @@
     <link href="/Content/style.css" rel="stylesheet" />
     <script src="/Scripts/jquery-1.9.1.min.js"></script>
     <script src="/Scripts/jquery.unobtrusive-ajax.js"></script>
+    <script src="/Scripts/jquery.validate.min.js"></script>
     <script type="text/javascript">
         function LoginSystem(data) {
             if(data != null)
             {
-                if (data.split('|')[0] == "1")
+                var loginInfo = data.split('|');
+               
+                if (loginInfo[0] == "1")
                 {
                     window.location.href = "/Home/Index";
                 }
                 else
                 {
-                    alert(data.split('|')[1]);
-                    return;
+                    setTimeout(function () {
+                        $("#msgtip").html(loginInfo[1]).attr("style", "font-size:14px; color:#FFFFFF;").show(1000);
+                    }, 300);
                 }
             }
+        }
+        function CheckInput()
+        {
+            var username = $("#username").val();
+            if (username == null || username == "")
+            {
+                $("#msgtip").html("请输入登录账号").attr("style", "font-size:14px; color:#FFCCFF;");
+                setTimeout(function () {
+                    $("#msgtip").html("请输入登录账号").attr("style", "font-size:14px; color:#FFFFFF;");
+                }, 200);
+                return false;
+            }
+            var username = $("#password").val();
+            if (username == null || username == "") {
+                $("#msgtip").html("请输入登录密码").attr("style", "font-size:14px; color:#FFCCFF;");
+                setTimeout(function () {
+                    $("#msgtip").html("请输入登录密码").attr("style", "font-size:14px; color:#FFFFFF;");
+                }, 200);
+                return false;
+            }
+            $("#msgtip").html("正在登录...")
+            return true;
         }
     </script>
 </head>
@@ -51,7 +77,7 @@
                     <label class="icon pwd" for="txtPassword"></label>
                 </div>
                 <div class="col">
-                    <button type="submit" class="login-btn">
+                    <button type="submit" class="login-btn" onclick="return CheckInput();">
                         登 录 <i class="m-icon-swapright m-icon-white"></i>
                     </button>
                 </div>
