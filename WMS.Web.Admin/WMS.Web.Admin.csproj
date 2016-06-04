@@ -195,6 +195,9 @@
     <Compile Include="ashx\Sys_Ajax.ashx.cs">
       <DependentUpon>Sys_Ajax.ashx</DependentUpon>
     </Compile>
+    <Compile Include="ashx\Sys_User.ashx.cs">
+      <DependentUpon>Sys_User.ashx</DependentUpon>
+    </Compile>
     <Compile Include="Common\BaseController.cs" />
     <Compile Include="Common\DictionaryContext.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -787,6 +790,9 @@
     <Content Include="Config\Log4net.xml_bak" />
     <Content Include="ashx\Sys_Ajax.ashx" />
     <Content Include="Areas\Sys\Views\Web.config" />
+    <Content Include="Areas\Sys\Views\User\Index.cshtml" />
+    <Content Include="ashx\Sys_User.ashx" />
+    <Content Include="Areas\Sys\Views\User\jqGrid.cshtml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Scripts\bootstrap-tab.js" />
     <Content Include="Scripts\common.js" />

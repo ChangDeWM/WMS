@@ -46,7 +46,7 @@ namespace WMS.Web.Admin.ashx
                 url = "",
                 menus = new List<MenuModels>
                 {
-                    new MenuModels{id = "21",icon = "icon-user",text = "用户管理",url = "/Sys/Set/User"},
+                    new MenuModels{id = "21",icon = "icon-user",text = "用户管理",url = "/Sys/User/Index"},
                     new MenuModels{id = "22",icon = "icon-apple",text = "角色管理",url = "/Sys/Set/Role"}
                 }
             });

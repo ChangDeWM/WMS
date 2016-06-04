@@ -15,8 +15,7 @@ namespace WMS.Web.Admin.Areas.Sys.Controllers
         public ActionResult Index(WMS.Account.Contract.UserRequest request)
         {
             var list = this.AccountService.GetUserList(request);
-
-            return View();
+            return View(list);
         }
 
     }

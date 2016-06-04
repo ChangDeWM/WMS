@@ -1,0 +1,208 @@
+﻿@using WMS.Common.Contract
+@using WMS.Common.Utility
+@using WMS.Common.Web.Controls
+@using WMS.Account.Contract
+@using WMS.Core.Config
+@using WMS.Web
+
+@model PagedList<UserClassInfo>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>@CachedConfigContext.Current.SettingConfig.WebSiteTitle </title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- basic styles -->
+
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/assets/css/font-awesome.min.css" />
+
+    <!--[if IE 7]>
+      <link rel="stylesheet" href="/assets/css/font-awesome-ie7.min.css" />
+    <![endif]-->
+    <!-- page specific plugin styles -->
+    <!-- fonts -->
+
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300" />
+
+    <!-- ace styles -->
+
+    <link rel="stylesheet" href="/assets/css/ace.min.css" />
+    <link rel="stylesheet" href="/assets/css/ace-rtl.min.css" />
+    <link rel="stylesheet" href="/assets/css/ace-skins.min.css" />
+
+    <!--[if lte IE 8]>
+      <link rel="stylesheet" href="/assets/css/ace-ie.min.css" />
+    <![endif]-->
+    <!-- inline styles related to this page -->
+    <!-- ace settings handler -->
+
+    <script src="/assets/js/ace-extra.min.js"></script>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/assets/js/html5shiv.js"></script>
+    <script src="/assets/js/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <div class="row-fluid">
+        <div class="span4">
+            <div>
+                <a class="btn red" id="delete" href="javascript:;"><i class="icon-trash icon-white"></i> 删除</a>
+                <a class="btn blue thickbox" title='添加新用户' href="@Url.Action("Create")?TB_iframe=true&height=350&width=500"><i class="icon-plus icon-white"></i> 新增</a>
+            </div>
+        </div>
+        <div class="span8">
+            @using (Html.BeginForm(null, null, null, FormMethod.Get, new { id = "search" }))
+            {
+                <div class="dataTables_filter">
+                    <label>
+                        <button type="submit" class="btn">搜索 <i class="icon-search"></i></button>
+                    </label>
+                    <label>
+                        <span>电话：</span>
+                        @Html.TextBox("Mobile", null, new { @class = "m-wrap small" })
+                    </label>
+                    <label>
+                        <span>登录名：</span>
+                        @Html.TextBox("LoginName", null, new { @class = "m-wrap small" })
+                    </label>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="alert">
+        <button class="close" data-dismiss="alert"></button>
+        <strong>用户权限相关：</strong>
+        请编辑其所属角色的权限，用户的权限是其所有角色所拥有的权限汇总！
+    </div>
+
+
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <!-- PAGE CONTENT BEGINS -->
+
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="table-responsive">
+                                        @using (Html.BeginForm("Delete", "User", FormMethod.Post, new { id = "mainForm" }))
+                            {
+                            <table class="table table-striped table-hover ">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 8px;">
+                                            <input type="checkbox" id="checkall" class="group-checkable" />
+                                        </th>
+                                        <th>
+                                            登录账号
+                                        </th>
+                                        <th>
+                                            用户姓名
+                                        </th>
+                                        <th>
+                                            邮箱
+                                        </th>
+                                        <th>
+                                            电话
+                                        </th>
+                                        <th class="hidden-480">
+                                            角色
+                                        </th>
+                                        <th>
+                                            功能
+                                        </th>
+                                        <th>
+                                            激活
+                                        </th>
+                                        <th>
+                                            操作
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var m in Model)
+                                    {
+                                <tr>
+                                    <td>
+                                        1
+                                    </td>
+                                    <td>
+                                        @m.LoginAccount
+                                    </td>
+                                    <td>
+                                        @m.NickName
+                                    </td>
+                                    <td>
+                                        @m.Mobile
+                                    </td>
+                                    <td>
+                                        @m.EnterpriseName
+                                    </td>
+                                    <td class="hidden-480">
+                                        @m.DepartmentName
+                                    </td>
+                                    <td class="hidden-480"></td>
+                                    <td>
+                                        <span class="label label-@(m.Status.Equals(0)  ? "success" : "inverse")">@m.Status</span>
+                                    </td>
+                                    <td>
+                                        <a class="btn mini purple thickbox" title='编辑用户资料' href="@Url.Action("Edit", new { id = m.UserId })?TB_iframe=true&height=350&width=500">
+                                            <i class="icon-edit"></i>
+                                            编辑
+                                        </a>
+                                    </td>
+                                </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            }
+                                        <div class="dataTables_paginate paging_bootstrap pagination">
+                                            @Html.Pager(Model, new PagerOptions() { ShowTotalItemCount = true })
+                                        </div>
+                                    </div><!-- /.table-responsive -->
+                                </div><!-- /span -->
+                            </div><!-- /row -->
+                        </div>
+                    </div>
+
+
+            <script type="text/javascript">
+                window.jQuery || document.write("<script src='/assets/js/jquery-2.0.3.min.js'>" + "<" + "/script>");
+            </script>
+
+            <!-- <![endif]-->
+            <!--[if IE]>
+            <script type="text/javascript">
+             window.jQuery || document.write("<script src='/assets/js/jquery-1.10.2.min.js'>"+"<"+"/script>");
+            </script>
+            <![endif]-->
+
+            <script type="text/javascript">
+                if ("ontouchend" in document) document.write("<script src='/assets/js/jquery.mobile.custom.min.js'>" + "<" + "/script>");
+            </script>
+            <script src="/assets/js/bootstrap.min.js"></script>
+            <script src="/assets/js/typeahead-bs2.min.js"></script>
+
+            <!-- page specific plugin scripts -->
+
+            <script src="/assets/js/jquery.dataTables.min.js"></script>
+            <script src="/assets/js/jquery.dataTables.bootstrap.js"></script>
+
+            <!-- ace scripts -->
+
+            <script src="/assets/js/ace-elements.min.js"></script>
+            <script src="/assets/js/ace.min.js"></script>
+
+            <!-- inline scripts related to this page -->
+</body>
+</html>
