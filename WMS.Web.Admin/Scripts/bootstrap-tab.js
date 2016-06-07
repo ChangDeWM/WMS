@@ -10,6 +10,7 @@ var addTabs = function (options) {
         url = "";
     }
     options.url = url + options.url;
+
     //写入Cookie，目的是刷新加载
     var optionsList = JSON.parse($.cookie("wms_cookie_nav_zj"));
     if (optionsList != null) {
@@ -40,6 +41,9 @@ var addTabs = function (options) {
         if (options.content) {
             content = '<div role="tabpanel" class="tab-pane" id="' + id + '">' + options.content + '</div>';
         } else {//没有内容，使用IFRAME打开链接
+
+            $("#loadDiv").show();
+
             var ifId = "page_" + id;
             content = '<div role="tabpanel" class="tab-pane" id="' + id + '"><iframe id="page_' + id + '" src="' + options.url + '" width="100%" height="' + mainHeight +
                 '" frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="yes" allowtransparency="yes"></iframe></div>';
@@ -58,16 +62,19 @@ var addTabs = function (options) {
         if (iframe.attachEvent) {
             iframe.attachEvent("onload", function () {
                 iframe.height = iframe.contentWindow.document.documentElement.scrollHeight;
+                document.getElementById("loadDiv").style.display = "none";
             });
             return;
         } else {
             iframe.onload = function () {
                 iframe.height = iframe.contentDocument.body.scrollHeight;
+                document.getElementById("loadDiv").style.display = "none";
             };
             return;
         }
     } catch (e) {
         iframe.height = 500;
+        document.getElementById("loadDiv").style.display = "none";
     }
 };
 

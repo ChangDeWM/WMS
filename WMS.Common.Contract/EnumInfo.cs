@@ -25,6 +25,6 @@ namespace WMS.Common.Contract
 
     public class ConstStr
     {
-        public const string AppSessionId = "wms_security_key";
+        public const string AppSessionId ="ASP.NET_SessionId"; //"wms_security_key";
     }
 }

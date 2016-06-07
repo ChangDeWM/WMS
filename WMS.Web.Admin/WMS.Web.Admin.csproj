@@ -452,6 +452,7 @@
     <Content Include="Config\SystemConfig.xml" />
     <Content Include="Config\UploadConfig.xml" />
     <Content Include="Content\base.css" />
+    <Content Include="Content\dt.css" />
     <Content Include="Content\font-awesome\.gitignore" />
     <Content Include="Content\font-awesome\css\font-awesome-ie7.css" />
     <Content Include="Content\font-awesome\css\font-awesome-ie7.min.css" />
@@ -539,6 +540,7 @@
     <Content Include="Content\font-awesome\src\_layouts\icon.html" />
     <Content Include="Content\ie_update.jpg" />
     <Content Include="Content\layout.css" />
+    <Content Include="Content\loader.gif" />
     <Content Include="Content\logo.png" />
     <Content Include="Content\sidebar-menu\sidebar-menu.css" />
     <Content Include="Content\sidebar-menu\sidebar-menu.js" />
@@ -793,6 +795,9 @@
     <Content Include="Areas\Sys\Views\User\Index.cshtml" />
     <Content Include="ashx\Sys_User.ashx" />
     <Content Include="Areas\Sys\Views\User\jqGrid.cshtml" />
+    <Content Include="Areas\Sys\Views\User\UserList.cshtml" />
+    <Content Include="Areas\Sys\Views\User\_partialUser.cshtml" />
+    <Content Include="Areas\Sys\Views\User\Index - 复制.cshtml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Scripts\bootstrap-tab.js" />
     <Content Include="Scripts\common.js" />

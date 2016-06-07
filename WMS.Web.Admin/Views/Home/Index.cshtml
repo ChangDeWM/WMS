@@ -168,7 +168,7 @@
                                     <li id="tabIndex" class="active"><a href="#Index" role="tab" data-toggle="tab">首页<i class="icon-lock"></i></a></li>
                                 </ul>
                             </div>
-                            <div class="tab-content" style="height:100%;">
+                            <div class="tab-content" style="height:100%; padding:0px;">
                                 <div role="tabpanel" class="tab-pane active" id="Index" style="height:100%;">
                                     <h2>欢迎进入后台管理系统</h2>
                                     <div class="rule-single-checkbox">
@@ -262,5 +262,31 @@
     @*<div style="display:none">
             <script src='http://v7.cnzz.com/stat.php?id=155540&web_id=155540' language='JavaScript' charset='gb2312'></script>
         </div>*@
+
+    <style type="text/css">
+        .loading {
+            width: 200px;
+            height: 56px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            line-height: 56px;
+            color: #fff;
+            padding-left: 60px;
+            font-size: 15px;
+            background: #000 url(/Content/loader.gif) no-repeat 10px 50%;
+            opacity: 0.7;
+            z-index: 9999;
+            -moz-border-radius: 20px;
+            -webkit-border-radius: 20px;
+            border-radius: 20px;
+            filter: progid:DXImageTransform.Microsoft.Alpha(opacity=70);
+            display:none;
+        }
+    </style>
+    @*<div id="loadDiv" style="display:none; width:100px; height:100px; background:#00ffff; color:#000000; font-size:14px; position:absolute; top:150px; left:300px; z-index:9999;">*@
+    <div id="loadDiv" class="loading">
+        <span>加载中....</span>
+    </div>
 </body>
 </html>

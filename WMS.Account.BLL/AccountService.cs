@@ -156,6 +156,9 @@ namespace WMS.Account.BLL
                 if (!string.IsNullOrEmpty(request.Mobile))
                     users = users.Where(u => u.Mobile.Contains(request.Mobile));
 
+                if (!string.IsNullOrEmpty(request.OrderAsc) && request.OrderAsc.Equals("00"))
+                    return users.OrderBy(n => n.LoginAccount).ToPagedList(request.PageIndex, request.PageSize);
+
                 return users.OrderByDescending(u => u.UserId).ToPagedList(request.PageIndex, request.PageSize);
             }
         }

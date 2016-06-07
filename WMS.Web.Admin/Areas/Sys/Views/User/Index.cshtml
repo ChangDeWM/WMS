@@ -3,7 +3,8 @@
 @using WMS.Common.Web.Controls
 @using WMS.Account.Contract
 @using WMS.Core.Config
-@using WMS.Web
+@using WMS.Web;
+
 
 @model PagedList<UserClassInfo>
 
@@ -51,10 +52,19 @@
     <!--[if lt IE 9]>
     <script src="/assets/js/html5shiv.js"></script>
     <script src="/assets/js/respond.min.js"></script>
-    <![endif]-->
+    <![endif]-->   
+    <link href="/Content/dt.css" rel="stylesheet" />
+    <style type="text/css">
+        body {
+            background-color: #FFF;
+        }
+        .row { margin-right:0px;}
+        .padright{padding-right:0px;}
+        table th{text-align:center;}
+    </style> 
 </head>
 <body>
-    <div class="row-fluid">
+    <div class="row">
         <div class="span4">
             <div>
                 <a class="btn red" id="delete" href="javascript:;"><i class="icon-trash icon-white"></i> 删除</a>
@@ -62,8 +72,9 @@
             </div>
         </div>
         <div class="span8">
-            @using (Html.BeginForm(null, null, null, FormMethod.Get, new { id = "search" }))
-            {
+            @*@using (Ajax.BeginForm(null, null, new AjaxOptions { LoadingElementId = "loadDiv", UpdateTargetId = "userDvOrder" },null))*@
+                @using (Html.BeginForm(null, null, null, FormMethod.Get, new { id = "search" }))
+                {
                 <div class="dataTables_filter">
                     <label>
                         <button type="submit" class="btn">搜索 <i class="icon-search"></i></button>
@@ -77,132 +88,52 @@
                         @Html.TextBox("LoginName", null, new { @class = "m-wrap small" })
                     </label>
                 </div>
-            }
+                }
         </div>
     </div>
 
-    <div class="alert">
-        <button class="close" data-dismiss="alert"></button>
-        <strong>用户权限相关：</strong>
-        请编辑其所属角色的权限，用户的权限是其所有角色所拥有的权限汇总！
+    <div class="row">
+        <div id="loadDiv" class="ajaxloading">
+            <span>加载中....</span>
+        </div>
+
+        <div class="col-xs-12 padright">
+            <div class="table-header">
+                用户信息
+            </div>
+            <div class="table-responsive" id="userDvOrder">
+                @{Html.RenderPartial("_partialUser", Model); }
+            </div>
+        </div>
     </div>
+    <script type="text/javascript">
+        window.jQuery || document.write("<script src='/assets/js/jquery-2.0.3.min.js'>" + "<" + "/script>");
+    </script>
 
+    <!-- <![endif]-->
+    <!--[if IE]>
+    <script type="text/javascript">
+     window.jQuery || document.write("<script src='/assets/js/jquery-1.10.2.min.js'>"+"<"+"/script>");
+    </script>
+    <![endif]-->
 
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <!-- PAGE CONTENT BEGINS -->
+    <script type="text/javascript">
+        if ("ontouchend" in document) document.write("<script src='/assets/js/jquery.mobile.custom.min.js'>" + "<" + "/script>");
+    </script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <script src="/assets/js/typeahead-bs2.min.js"></script>
 
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <div class="table-responsive">
-                                        @using (Html.BeginForm("Delete", "User", FormMethod.Post, new { id = "mainForm" }))
-                            {
-                            <table class="table table-striped table-hover ">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 8px;">
-                                            <input type="checkbox" id="checkall" class="group-checkable" />
-                                        </th>
-                                        <th>
-                                            登录账号
-                                        </th>
-                                        <th>
-                                            用户姓名
-                                        </th>
-                                        <th>
-                                            邮箱
-                                        </th>
-                                        <th>
-                                            电话
-                                        </th>
-                                        <th class="hidden-480">
-                                            角色
-                                        </th>
-                                        <th>
-                                            功能
-                                        </th>
-                                        <th>
-                                            激活
-                                        </th>
-                                        <th>
-                                            操作
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var m in Model)
-                                    {
-                                <tr>
-                                    <td>
-                                        1
-                                    </td>
-                                    <td>
-                                        @m.LoginAccount
-                                    </td>
-                                    <td>
-                                        @m.NickName
-                                    </td>
-                                    <td>
-                                        @m.Mobile
-                                    </td>
-                                    <td>
-                                        @m.EnterpriseName
-                                    </td>
-                                    <td class="hidden-480">
-                                        @m.DepartmentName
-                                    </td>
-                                    <td class="hidden-480"></td>
-                                    <td>
-                                        <span class="label label-@(m.Status.Equals(0)  ? "success" : "inverse")">@m.Status</span>
-                                    </td>
-                                    <td>
-                                        <a class="btn mini purple thickbox" title='编辑用户资料' href="@Url.Action("Edit", new { id = m.UserId })?TB_iframe=true&height=350&width=500">
-                                            <i class="icon-edit"></i>
-                                            编辑
-                                        </a>
-                                    </td>
-                                </tr>
-                                    }
-                                </tbody>
-                            </table>
-                            }
-                                        <div class="dataTables_paginate paging_bootstrap pagination">
-                                            @Html.Pager(Model, new PagerOptions() { ShowTotalItemCount = true })
-                                        </div>
-                                    </div><!-- /.table-responsive -->
-                                </div><!-- /span -->
-                            </div><!-- /row -->
-                        </div>
-                    </div>
+    <!-- page specific plugin scripts -->
 
+    <script src="/assets/js/jquery.dataTables.min.js"></script>
+    <script src="/assets/js/jquery.dataTables.bootstrap.js"></script>
 
-            <script type="text/javascript">
-                window.jQuery || document.write("<script src='/assets/js/jquery-2.0.3.min.js'>" + "<" + "/script>");
-            </script>
+    <!-- ace scripts -->
 
-            <!-- <![endif]-->
-            <!--[if IE]>
-            <script type="text/javascript">
-             window.jQuery || document.write("<script src='/assets/js/jquery-1.10.2.min.js'>"+"<"+"/script>");
-            </script>
-            <![endif]-->
-
-            <script type="text/javascript">
-                if ("ontouchend" in document) document.write("<script src='/assets/js/jquery.mobile.custom.min.js'>" + "<" + "/script>");
-            </script>
-            <script src="/assets/js/bootstrap.min.js"></script>
-            <script src="/assets/js/typeahead-bs2.min.js"></script>
-
-            <!-- page specific plugin scripts -->
-
-            <script src="/assets/js/jquery.dataTables.min.js"></script>
-            <script src="/assets/js/jquery.dataTables.bootstrap.js"></script>
-
-            <!-- ace scripts -->
-
-            <script src="/assets/js/ace-elements.min.js"></script>
-            <script src="/assets/js/ace.min.js"></script>
-
-            <!-- inline scripts related to this page -->
+    <script src="/assets/js/ace-elements.min.js"></script>
+    <script src="/assets/js/ace.min.js"></script>
+    <script src="/Scripts/jquery.unobtrusive-ajax.js"></script>
+    <!-- inline scripts related to this page -->
 </body>
+
 </html>
