@@ -75,6 +75,11 @@ namespace WMS.Account.BLL
                     }
                 }
             }
+            if(loginInfo != null)
+            {
+                //说明登录成功了,写入缓存
+                RedisCache.Set<UserClassInfo>(String.Format("User_{0}", loginInfo.LoginToken), GetUser(loginInfo.UserId), 60 * 60 * 2);
+            }
             return loginInfo;
         }
 
@@ -112,14 +117,40 @@ namespace WMS.Account.BLL
             }
         }
 
-        public UserClassInfo GetUser(int id)
+        public UserClassInfo GetUser(int userId)
         {
             using (var dbContext = new WmsDbContext())
             {
-                //return dbContext.UserInfo.FirstOrDefault(u=>u.Id.Equals(id));
-                //组合权限后生成UserClassInfo
-                return new UserClassInfo();
+                IQueryable<UserClassInfo> users = from n in dbContext.UserInfo
+                                                  join en in dbContext.Enterprise on n.EnterpriseId equals en.Id into JoinedEmpEnterprise
+                                                  from en in JoinedEmpEnterprise.DefaultIfEmpty()
+                                                  join dpt in dbContext.Department on n.DepId equals dpt.Id into JoinedEmpDept
+                                                  from dpt in JoinedEmpDept.DefaultIfEmpty()
+                                                  where n.Id.Equals(userId) && !n.Status.Equals(1)
+                                                  select new UserClassInfo
+                                                  {
+                                                      DepartmentName = dpt != null ? dpt.DepName : null,
+                                                      EnterpriseName = en != null ? en.EnterpriseName : null,
+                                                      DepartmentId = n.DepId,
+                                                      EnterpriseId = n.EnterpriseId,
+                                                      LoginAccount = n.UserAccount,
+                                                      ManageLevel = n.ManageLevel,
+                                                      NickName = n.NickName,
+                                                      PostId = n.PostId,
+                                                      PostName = "",
+                                                      Remarks = n.Remarks,
+                                                      Status = n.Status,
+                                                      UserId = n.Id,
+                                                      Mobile = n.Telephone
+                                                  };
+                return users.FirstOrDefault();
             }
+            //using (var dbContext = new WmsDbContext())
+            //{
+            //    //return dbContext.UserInfo.FirstOrDefault(u=>u.Id.Equals(id));
+            //    //组合权限后生成UserClassInfo
+            //    return new UserClassInfo();
+            //}
         }
 
         public IEnumerable<UserClassInfo> GetUserList(UserRequest request = null)

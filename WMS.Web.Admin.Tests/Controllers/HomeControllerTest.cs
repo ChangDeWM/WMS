@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WMS.Web.Admin;
 using WMS.Web.Admin.Controllers;
+using WMS.Web;
 
 namespace WMS.Web.Admin.Tests.Controllers
 {

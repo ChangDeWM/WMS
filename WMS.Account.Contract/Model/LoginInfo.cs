@@ -32,6 +32,8 @@ namespace WMS.Account.Contract
         public string LoginAccount { get; set; }
         public string ClientIP { get; set; }
         public EnumLoginInfo EnumLoginAccountType { get; set; }
+
+        public UserClassInfo UserClassInfo { set; get; }
     }
 }
 
