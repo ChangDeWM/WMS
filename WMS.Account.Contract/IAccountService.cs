@@ -13,6 +13,8 @@ namespace WMS.Account.Contract
         UserClassInfo GetUser(int userId);
         IEnumerable<UserClassInfo> GetUserList(UserRequest request = null);
         void SaveUser(UserClassInfo user);
+
+        void SaveTempUser();
         void DeleteUser(List<int> ids);
 
         Guid SaveVerifyCode(string verifyCodeText);

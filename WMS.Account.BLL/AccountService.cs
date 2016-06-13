@@ -225,6 +225,22 @@ namespace WMS.Account.BLL
             }
         }
 
+        public void SaveTempUser()
+        {
+            using (var dbContext = new WmsDbContext())
+            {
+                for (var j = 1; j < 100; j++)
+                {
+                    for (var i = 1; i < 500; i++)
+                    {
+                        var us = String.Format("USER_{0}_{1}",j,i);
+                        dbContext.UserInfo.Add(
+                            new UserInfo { DepId = 1001, EnterpriseId = 1, ManageLevel = 3, NickName = us, Password = "E1-0A-DC-39-49-BA-59-AB-BE-56-E0-57-F2-0F-88-3E", PostId = 0, Status = 0, Telephone = "18773187585", UserAccount = us, UserName = "Json No." + us, Remarks = "system" });
+                    }
+                    dbContext.SaveChanges();
+                }
+            }
+        }
         public void DeleteUser(List<int> ids)
         {
             using (var dbContext = new WmsDbContext())
