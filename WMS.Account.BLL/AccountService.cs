@@ -173,7 +173,7 @@ namespace WMS.Account.BLL
                                                       EnterpriseId = n.EnterpriseId,
                                                       LoginAccount = n.UserAccount,
                                                       ManageLevel = n.ManageLevel,
-                                                      NickName = n.NickName,
+                                                      NickName = n.UserName + "(" + n.NickName + ")",
                                                       PostId = n.PostId,
                                                       PostName = "",
                                                       Remarks = n.Remarks,
@@ -181,11 +181,14 @@ namespace WMS.Account.BLL
                                                       UserId = n.Id,
                                                       Mobile = n.Telephone
                                                   };
-                if (!string.IsNullOrEmpty(request.LoginName))
-                    users = users.Where(u => u.LoginAccount.Contains(request.LoginName));
+                if (!string.IsNullOrEmpty(request.LoginAccount))
+                    users = users.Where(u => u.LoginAccount.Contains(request.LoginAccount));
 
                 if (!string.IsNullOrEmpty(request.Mobile))
                     users = users.Where(u => u.Mobile.Contains(request.Mobile));
+
+                if (!string.IsNullOrEmpty(request.UserName))
+                    users = users.Where(u => u.NickName.Contains(request.UserName));
 
                 if (!string.IsNullOrEmpty(request.OrderAsc) && request.OrderAsc.Equals("00"))
                     return users.OrderBy(n => n.LoginAccount).ToPagedList(request.PageIndex, request.PageSize);

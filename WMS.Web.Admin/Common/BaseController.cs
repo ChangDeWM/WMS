@@ -68,8 +68,12 @@ namespace WMS.Web.Admin.Common
             if (String.IsNullOrEmpty(security_key))
             {
                 //跳转登录，可跳转SSO
-                filterContext.HttpContext.Response.Redirect("/Login");
-                Response.End();
+                //filterContext.HttpContext.Response.Redirect("/Login");
+                //Response.End();
+
+                //脚本跳转
+                filterContext.HttpContext.Response.Write("<script>top.location='/Login/Index';</script>");
+                filterContext.HttpContext.Response.End();
             }
             else
             {
@@ -78,8 +82,9 @@ namespace WMS.Web.Admin.Common
                 if (userClassInfo == null)
                 {
                     Cookie.Remove(ConstStr.AppSessionId);//移除Cookie
-                    filterContext.HttpContext.Response.Redirect("/Login/Index");
-                    Response.End();
+                    //filterContext.HttpContext.Response.Redirect("/Login/Index");
+                    filterContext.HttpContext.Response.Write("<script>top.location='/Login/Index';</script>");
+                    filterContext.HttpContext.Response.End();
                 }
                 //更新Cookie过期时间，更新到2小时候过期
                 Cookie.Save(ConstStr.AppSessionId, security_key, 2);

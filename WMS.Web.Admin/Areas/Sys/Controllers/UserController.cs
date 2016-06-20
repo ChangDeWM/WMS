@@ -14,7 +14,7 @@ namespace WMS.Web.Admin.Areas.Sys.Controllers
         // GET: /Sys/User/ 
         // List
         public ActionResult Index(WMS.Account.Contract.UserRequest request)
-        {
+        {            
             var list = this.AccountService.GetUserList(request);
             if (Request.IsAjaxRequest())
             {
@@ -31,6 +31,12 @@ namespace WMS.Web.Admin.Areas.Sys.Controllers
                 return PartialView("_partialUser", list);
             }
             return View(list);
+        }
+
+        public ActionResult Delete(int id)
+        {
+            this.AccountService.DeleteUser(new List<int> { id});
+            return Content("0");
         }
     }
 }
