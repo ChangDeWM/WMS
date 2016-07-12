@@ -7,7 +7,7 @@ using WMS.Account.DAL;
 using WMS.Common.Utility;
 using WMS.Common.Contract;
 using WMS.Common.Reids;
-//using EntityFramework.Extensions;
+using EntityFramework.Extensions;
 
 using WMS.Core.Cache;
 using WMS.Core.Config;
@@ -164,7 +164,7 @@ namespace WMS.Account.BLL
                                                   from en in JoinedEmpEnterprise.DefaultIfEmpty()
                                                   join dpt in dbContext.Department on n.DepId equals dpt.Id into JoinedEmpDept
                                                   from dpt in JoinedEmpDept.DefaultIfEmpty()
-                                                  where !n.Status.Equals(1)
+                                                  //where !n.Status.Equals(1)
                                                   select new UserClassInfo
                                                   {
                                                       DepartmentName = dpt != null ? dpt.DepName : null,
@@ -228,6 +228,21 @@ namespace WMS.Account.BLL
             }
         }
 
+        public bool CheckUser(int userId,bool checkStatus)
+        {
+            int stauts = checkStatus ? 0 : 1;
+            using (var dbContext = new WmsDbContext())
+            {
+                var rows = dbContext.UserInfo.FirstOrDefault(n => n.Id.Equals(userId));
+                if(rows != null)
+                {
+                    rows.Status = stauts;
+                }
+                return dbContext.SaveChanges()>0;
+                //dbContext.UserInfo.Update(n => n.Id.Equals(userId), u => new UserInfo{ u.Status = stauts});
+            }
+        }
+
         public void SaveTempUser()
         {
             using (var dbContext = new WmsDbContext())
@@ -248,7 +263,7 @@ namespace WMS.Account.BLL
         {
             using (var dbContext = new WmsDbContext())
             {
-                //dbContext.Users.Include("Roles").Where(u => ids.Contains(u.ID)).ToList().ForEach(a => { a.Roles.Clear(); dbContext.Users.Remove(a); });
+                dbContext.UserInfo.Where(n => ids.Contains(n.Id)).Delete();                
                 //dbContext.SaveChanges();
             }
         }

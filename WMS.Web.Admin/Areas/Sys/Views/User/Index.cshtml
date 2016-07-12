@@ -8,7 +8,7 @@
 @section PageSpecificJavascriptIncludes{
     <script type="text/javascript">
         $(document).ready(function () {
-
+            bootbox.setDefaults({ locale: "zh_CN" });
         });
     </script>
 }
@@ -25,6 +25,7 @@
         .padright{padding-right:0px;}
         table th{text-align:center;}
         .text-right{ text-align:right;}
+        .modal-dialog{ width:300px; margin-top:200px;}
     </style> 
     }
     <div class="row">
@@ -61,9 +62,9 @@
             <div class="table-header">
                 用户信息  @*<a class="btn btn-primary thickbox" title='添加新用户' href="@Url.Action("Create")?TB_iframe=true&height=350&width=500"><i class="icon-plus icon-white"></i> 新增</a>*@
                  <a href="#" class="myGreenButton"><i class="icon-plus icon-white"></i> 新增</a>
-                @*<a href="#" class="btn btn-waning btn-xs radius-4">
-                    <i class="icon-plus icon-white"></i> 新增
-                </a>*@
+                @*<a class="myRedButton" id="delete" href="javascript:;"><i class="icon-trash icon-white"></i> 删除</a>*@
+
+                <a class="myRedButton" id="deleteUser" href="javascript:;"><i class="icon-trash icon-white"></i> 删除用户</a>
             </div>
             <div class="table-responsive" id="userDvOrder">
                 @{Html.RenderPartial("_partialUser", Model); }

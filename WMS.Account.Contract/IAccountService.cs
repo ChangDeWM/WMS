@@ -14,6 +14,7 @@ namespace WMS.Account.Contract
         IEnumerable<UserClassInfo> GetUserList(UserRequest request = null);
         void SaveUser(UserClassInfo user);
 
+        bool CheckUser(int userId, bool checkStatus);
         void SaveTempUser();
         void DeleteUser(List<int> ids);
 

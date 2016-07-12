@@ -329,6 +329,7 @@
     <Content Include="assets\ace_demo\pricing.html" />
     <Content Include="assets\ace_demo\profile.html" />
     <Content Include="assets\ace_demo\tables.html" />
+    <Content Include="assets\ace_demo\test.html" />
     <Content Include="assets\ace_demo\timeline.html" />
     <Content Include="assets\ace_demo\treeview.html" />
     <Content Include="assets\ace_demo\typography.html" />
@@ -810,6 +811,8 @@
     <Content Include="Scripts\jquery-1.9.1.min.js" />
     <Content Include="Scripts\navfix.js" />
     <Content Include="Scripts\placeholder.js" />
+    <Content Include="Scripts\zj.admin.common.js" />
+    <Content Include="Scripts\zj.admin.delete.js" />
     <Content Include="Views\Home\a.html" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">

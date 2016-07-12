@@ -33,10 +33,44 @@ namespace WMS.Web.Admin.Areas.Sys.Controllers
             return View(list);
         }
 
-        public ActionResult Delete(int id)
+        //public ActionResult Delete(int id)
+        //{
+        //    this.AccountService.DeleteUser(new List<int> { id});
+        //    return Content("0");
+        //}
+
+        //[HttpPost]
+        //public ActionResult Delete(List<int> ids)
+        //{
+        //    this.AccountService.DeleteUser(ids);
+        //    return RedirectToAction("Index");
+        //}
+
+        [HttpPost]
+        public JsonResult Check(int id, bool status)
         {
-            this.AccountService.DeleteUser(new List<int> { id});
-            return Content("0");
+            if (this.AccountService.CheckUser(id, status))
+                return new JsonResult { Data = "OK" };
+            else
+                return new JsonResult { Data = "更新失败" };
+        }
+
+
+        [HttpPost]
+        public JsonResult Delete(int id)
+        {
+            this.AccountService.DeleteUser(new List<int> { id });
+            return new JsonResult { Data = "OK" };
+        }
+
+        public JsonResult DeleteUser(string ids)
+        {
+            var strcc = ids.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+
+
+            List<int> idlist = strcc.Select<string, int>(q => Convert.ToInt32(q)).ToList();
+            this.AccountService.DeleteUser(idlist);
+            return new JsonResult {  Data="OK", JsonRequestBehavior = JsonRequestBehavior.AllowGet};
         }
     }
 }
