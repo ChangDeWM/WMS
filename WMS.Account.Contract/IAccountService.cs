@@ -22,6 +22,6 @@ namespace WMS.Account.Contract
         bool CheckVerifyCode(string verifyCodeText, Guid guid);
 
         List<WMS.Account.Contract.MenuInfo> GetMenuList(int userId);
-
+        List<WMS.Account.Contract.MenuInfo> GetSecondLevelMenu();
     }
 }

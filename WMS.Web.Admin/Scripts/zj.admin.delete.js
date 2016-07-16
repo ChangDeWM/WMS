@@ -88,12 +88,14 @@ checkUserStatus = function (a, b, c) {
     var msg = st?"启用":"禁用";
     $.post(b, { 'id': a,'status':st }, function (data) {
         if (data == "OK") {
-            bootbox.alert({ message: "该账号"+msg+"成功！" });
+            toastr.success("该账号" + msg + "成功！");
+            //bootbox.alert({ message: "该账号"+msg+"成功！" });
             //var tr = $(d).parents("tr")[0];
             //tr.parentNode.removeChild(tr);
         }
         else {
-            bootbox.alert({ message: "该账号" + msg + "失败 " + data });
+            toastr.success("该账号" + msg + "失败 " + data);
+            //bootbox.alert({ message: "该账号" + msg + "失败 " + data });
             $(c)[0].control.checked = !st;
             return;
         }

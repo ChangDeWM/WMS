@@ -18,6 +18,8 @@
     <script src="/Scripts/jquery-1.9.1.min.js"></script>
     <script src="/Scripts/jquery.unobtrusive-ajax.js"></script>
     <script src="/Scripts/jquery.validate.min.js"></script>
+    <link href="~/Content/toastr/toastr.min.css" rel="stylesheet" />
+    <script src="~/Content/toastr/toastr.min.js"></script>
     <script type="text/javascript">
         function LoginSystem(data) {
             if(data != null)
@@ -38,6 +40,9 @@
         }
         function CheckInput()
         {
+            toastr.success("22222", "11111111111111");
+            //showTips('123');
+            //return false;
             var username = $("#username").val();
             if (username == null || username == "")
             {

@@ -25,7 +25,9 @@ namespace WMS.Web.Admin.ashx
             //写日志
             Log4NetHelper.Info(LoggerType.WebExceptionLog, String.Format(" SysAjax.ashx Cookie:{0} URL:{1}", serkey,userInfo), null);
 
-            var menuStr = WMS.Common.Reids.RedisCache.Get<String>("CommonCache_Menu");
+
+            var menuStr = Common.CommonContext.GetAllMenuJson();
+            //WMS.Common.Reids.RedisCache.Get<String>("CommonCache_Menu");
             context.Response.Write(menuStr);
             //var menu = new List<MenuModels>();
             //menu.Add(new MenuModels

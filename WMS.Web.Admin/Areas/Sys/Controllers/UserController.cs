@@ -33,19 +33,24 @@ namespace WMS.Web.Admin.Areas.Sys.Controllers
             return View(list);
         }
 
-        //public ActionResult Delete(int id)
-        //{
-        //    this.AccountService.DeleteUser(new List<int> { id});
-        //    return Content("0");
-        //}
+        #region Edit
+        public ActionResult Edit(int id)
+        {
+            var model = this.AccountService.GetUser(id);
+            return View(model);
+        }
 
-        //[HttpPost]
-        //public ActionResult Delete(List<int> ids)
-        //{
-        //    this.AccountService.DeleteUser(ids);
-        //    return RedirectToAction("Index");
-        //}
+        [HttpPost]
+        public ActionResult Edit(int id, FormCollection collection)
+        {
+            var model = this.AccountService.GetUser(id);
+            this.TryUpdateModel<UserClassInfo>(model);
+            this.AccountService.SaveUser(model);
 
+            return this.RefreshParent();
+        }
+
+        #endregion
         [HttpPost]
         public JsonResult Check(int id, bool status)
         {

@@ -1,0 +1,44 @@
+﻿@using WMS.Web
+
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en">
+<!--<![endif]-->
+<!-- BEGIN HEAD -->
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="" name="description" />
+    <meta content="" name="author" />
+    @RenderSection("PageSpecificStyleSheetIncludes", required: false)
+</head>
+<!-- END HEAD -->
+<!-- BEGIN BODY -->
+<body>
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "mainForm" }))
+    {
+        @RenderSection("MainContent", required: false)
+        @RenderBody()
+        
+        <div style="height:80px;"></div>
+        
+        <div class="form-actions navbar-fixed-bottom">
+            <button type="submit" id="submit" class="btn blue"><i class="icon-ok"></i> 提交</button>
+            <span id="submitloading" style="display:none;"><img src='@Url.StaticFile("/content/images/loading.gif")' /></span>
+            <button type="button" class="btn" id="cancel">撤销</button>
+            @Html.ValidationSummary(false)
+        </div>
+    }
+    @RenderSection("OtherContent", required: false)
+
+    @RenderSection("PageSpecificJavascriptIncludes", required: false)
+    <!-- END JAVASCRIPTS -->
+</body>
+<!-- END BODY -->
+</html>
