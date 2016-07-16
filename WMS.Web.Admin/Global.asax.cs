@@ -23,6 +23,8 @@ namespace WMS.Web.Admin
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AuthConfig.RegisterAuth();
+
+            DataCacheConfig.InitDataCache();
         }
     }
 }

@@ -157,5 +157,10 @@
 @*}*@
 <div>
     @Html.AjaxPager(Model, new PagerOptions() { PageIndexParameterName = "PageIndex", ShowTotalItemCount = true},
-                                     new AjaxOptions { UpdateTargetId = "userDvOrder", LoadingElementId = "loadDiv" })
+                                     new AjaxOptions { UpdateTargetId = "userDvOrder", LoadingElementId = "loadDiv", OnFailure="ShowFailure" })
 </div>
+<script type="text/javascript">
+    function ShowFailure() {
+        bootbox.alert({ message: "网络连接失败，请求被中断！",size:"small"});
+    }
+</script>

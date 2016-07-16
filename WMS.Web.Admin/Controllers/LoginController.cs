@@ -66,7 +66,13 @@ namespace WMS.Web.Admin.Controllers
             }
             catch(Exception exp)
             {
-                return Content("0|登录失败，系统异常<br />失败原因："+exp.Message.ToString());
+                #if DEBUG
+                    return Content("0|登录失败，系统异常<br />失败原因：" + exp.Message.ToString());
+                #endif
+
+                #if !DEBUG
+                   return Content("0|登录失败，系统异常<br />，请联系管理员！");
+                #endif
             }
         }
     }

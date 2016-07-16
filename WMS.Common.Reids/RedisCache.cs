@@ -476,6 +476,7 @@ namespace WMS.Common.Reids
         /// <returns></returns>
         public static bool Set<T>(string key, T t, int timeout = -1)
         {
+            if (t == null) return false;
             try
             {
                 using (IRedisClient redis = prcm.GetClient())

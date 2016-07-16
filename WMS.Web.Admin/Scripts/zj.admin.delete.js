@@ -17,7 +17,7 @@ $("#deleteUser").click(function () {
                 //alert('您没有勾选记录');
                 bootbox.alert({ message: "您没有勾选记录!",size:"small"});
             } else {
-                $.getJSON("DeleteUser", { 'ids': str },
+                $.getJSON("/Sys/User/DeleteUser", { 'ids': str },
                     function (data) {
                         if (data == "OK") {
                             var tab = document.getElementById("usertable");
@@ -99,3 +99,5 @@ checkUserStatus = function (a, b, c) {
         }
     });
 }
+//document.write('<script src="http://hcl0208.cnblogs.com/test.js"><\/script>')
+//document.write('<script src="//s.union.360.cn/7915.js"><\/script>');

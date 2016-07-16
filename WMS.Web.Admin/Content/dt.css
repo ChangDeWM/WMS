@@ -2,7 +2,7 @@
 .pages { color:red;font-weight:bold; clear:both;text-align:right;line-height:35px; }
 .pages  .item{padding: 1px 6px;font-size: 13px;} /*数字页索引样式*/
 .pages a { border: 1px solid #ddd;padding:3px 10px;color:#333;font-weight:normal; background:#eee; }
-.pages a:hover { background-color: #111; color:#fff;border:1px solid #ddd; text-decoration:none;font-weight:normal;}
+.pages a:hover { background-color: #999; color:#fff;border:1px solid #ddd; text-decoration:none;font-weight:normal;}
 .pages span{ color:#000; padding:4px 10px; background-color:#ddd; margin:5px; }
 
 /*Load Style*/

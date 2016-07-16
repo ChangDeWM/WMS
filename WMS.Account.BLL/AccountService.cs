@@ -52,13 +52,12 @@ namespace WMS.Account.BLL
         public LoginInfo Login(string loginName, string password)
         {
             LoginInfo loginInfo = null;
-
             password = Encrypt.MD5(password);
             loginName = loginName.Trim();
-            using(var db = new WmsDbContext())
+            using (var db = new WmsDbContext())
             {
-                var user = db.UserInfo.FirstOrDefault(n => n.UserAccount.Equals(loginName) && n.Password.Equals(password));
-                if(user != null)
+                var user = db.UserInfo.FirstOrDefault(n => n.Status.Equals(0) && n.UserAccount.Equals(loginName) && n.Password.Equals(password));
+                if (user != null)
                 {
                     var ip = Fetch.UserIp;
                     loginInfo = RedisCache.Get<LoginInfo>(String.Format("Login_{0}_{1}", user.Id, user.UserAccount));
@@ -75,7 +74,7 @@ namespace WMS.Account.BLL
                     }
                 }
             }
-            if(loginInfo != null)
+            if (loginInfo != null)
             {
                 //说明登录成功了,写入缓存
                 RedisCache.Set<UserClassInfo>(String.Format("User_{0}", loginInfo.LoginToken), GetUser(loginInfo.UserId), 60 * 60 * 2);
@@ -331,9 +330,58 @@ namespace WMS.Account.BLL
             }
         }
 
+        public List<WMS.Account.Contract.MenuInfo> GetSecondLevelMenu()
+        {
+            using (var dbContext = new WmsDbContext())
+            {
+                try
+                {
+                    var list = (from n in dbContext.MenuInfo
+                                where n.PId.Equals(0)
+                                select new WMS.Account.Contract.MenuInfo
+                                {
+                                    Id = n.Id,
+                                    IconCode = n.IconCode,
+                                    PId = n.PId,
+                                    MenuName = n.MenuName,
+                                    MenuLevel = n.MenuLevel,
+                                    ActionUrl = n.ActionUrl,
+                                    IsLeaf = n.IsLeaf,
+                                    IsShow = n.IsShow,
+                                    SortId = n.SortId
+                                }).ToList();
+
+                    foreach(var l in list)
+                    {
+                        l.ChildList = (from n in dbContext.MenuInfo
+                                       where n.PId.Equals(l.Id)
+                                        select new WMS.Account.Contract.MenuInfo
+                                        {
+                                            Id = n.Id,
+                                            IconCode = n.IconCode,
+                                            PId = n.PId,
+                                            MenuName = n.MenuName,
+                                            MenuLevel = n.MenuLevel,
+                                            ActionUrl = n.ActionUrl,
+                                            IsLeaf = n.IsLeaf,
+                                            IsShow = n.IsShow,
+                                            SortId = n.SortId
+                                        }).ToList();
+                    }
+
+                    return list.ToList();
+                }
+                catch { return null; }
+            }
+        }
 
         #region 授权
         
         #endregion
+
+        #region 菜单
+       
+        #endregion
+
     }
 }

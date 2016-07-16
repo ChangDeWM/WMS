@@ -86,28 +86,33 @@ namespace WMS.Web.Admin.Common
                     filterContext.HttpContext.Response.Write("<script>top.location='/Login/Index';</script>");
                     filterContext.HttpContext.Response.End();
                 }
-                //更新Cookie过期时间，更新到2小时候过期
-                Cookie.Save(ConstStr.AppSessionId, security_key, 2);
+                else
+                {
+                    //更新Cookie过期时间，更新到2小时候过期
+                    Cookie.Save(ConstStr.AppSessionId, security_key, 2);
 
-                ////判断是否有权限访问该页面
-                //string encodeUrl = Server.UrlEncode(Request.Url.ToString());
-                //string strUrl = Request.FilePath.ToString();
-                //string[] ls = strUrl.Split('/');
-                //string strAreaName=ls[0];
-                //string strControllerName = ls[1];
-                //string strActionName = (ls.Length >= 3 && ls[2].Trim().Length > 0) ? ls[2] : "Index";
-                //strAreaName = ls.Length <= 2 ? "" : strAreaName;
 
-                ////下面定义一组可能继承base.controller 但又无需权限验证的页面。参数对象 ActionName
-                ////暂时注释，如果需要则启用
-                ////string[] noActionNameList = { "Action1", "Action2", "Action3" };
-                //if(!UserContext.CheckPermission(security_key,strActionName,strControllerName,strActionName))
-                //{
-                //    Response.Redirect("/Error/Index?code=NoPermission&url=" + encodeUrl);
-                //    Response.End();
-                //}
-                //自动给每个页面加入ObjectAction列表对象
-                //ViewData["ObjectList"] = BusinessRule.SysManage.SysPmsControlMgr.GetViewObject(CurrentUser.User_ID, strControllerName, strActionName);
+                    ////判断是否有权限访问该页面
+                    //string encodeUrl = Server.UrlEncode(Request.Url.ToString());
+                    //string strUrl = Request.FilePath.ToString();
+                    //string[] ls = strUrl.Split('/');
+                    //string strAreaName=ls[0];
+                    //string strControllerName = ls[1];
+                    //string strActionName = (ls.Length >= 3 && ls[2].Trim().Length > 0) ? ls[2] : "Index";
+                    //strAreaName = ls.Length <= 2 ? "" : strAreaName;
+
+                    ////下面定义一组可能继承base.controller 但又无需权限验证的页面。参数对象 ActionName
+                    ////暂时注释，如果需要则启用
+                    ////string[] noActionNameList = { "Action1", "Action2", "Action3" };
+                    //if(!UserContext.CheckPermission(security_key,strActionName,strControllerName,strActionName))
+                    //{
+                    //    Response.Redirect("/Error/Index?code=NoPermission&url=" + encodeUrl);
+                    //    Response.End();
+                    //}
+                    //自动给每个页面加入ObjectAction列表对象
+                    //ViewData["ObjectList"] = BusinessRule.SysManage.SysPmsControlMgr.GetViewObject(CurrentUser.User_ID, strControllerName, strActionName);
+
+                }
             }
         }
     }
