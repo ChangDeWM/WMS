@@ -9,6 +9,8 @@ namespace WMS.Account.Contract
     public class UserClassInfo
     {
         public int UserId { set; get; }
+
+        public string UserName { set; get; }
         public string LoginAccount { set; get; }
         public string NickName { set; get; }
         public string Password { set; get; }

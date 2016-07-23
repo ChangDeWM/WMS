@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Newtonsoft;
 using WMS.Web.Admin.Common;
 using WMS.Account.Contract;
 
@@ -33,9 +34,30 @@ namespace WMS.Web.Admin.Areas.Sys.Controllers
             return View(list);
         }
 
-        #region Edit
+        #region Edit Create
+        public ActionResult Create()
+        {
+            var model = new UserClassInfo { Status = 1, Password="123456" };
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult Create(FormCollection collection)
+        {
+            var model = new UserClassInfo { Status=1 };
+            this.AccountService.SaveUser(model);
+
+            return this.RefreshParent();
+        }
+
         public ActionResult Edit(int id)
         {
+            var eList = this.AccountService.GetEnterpriseDict();
+            ViewData["eList"] = Newtonsoft.Json.JsonConvert.SerializeObject(eList);
+
+
+            var enterpriseInfo = this.AccountService.GetEnterpriseList();
+            ViewData["EnterpriseInfo"] = Newtonsoft.Json.JsonConvert.SerializeObject(enterpriseInfo).ToString();
             var model = this.AccountService.GetUser(id);
             return View(model);
         }
@@ -50,6 +72,21 @@ namespace WMS.Web.Admin.Areas.Sys.Controllers
             return this.RefreshParent();
         }
 
+        [HttpPost]
+        public JsonResult EidtAttr(int pk, FormCollection collection)
+        {
+            try
+            {
+                var filedName = collection["name"].ToString();
+                var filedValue = collection["value"].ToString();
+                //var id = collection["pk"].ToString();
+                if (this.AccountService.EditUserAttr(pk, filedName, filedValue))
+                    return new JsonResult { Data = "OK" };
+                else
+                    return new JsonResult { Data = "更新失败！" };
+            }
+            catch (Exception exp) { return new JsonResult { Data = "更新失败："+exp.Message.ToString() }; }
+        }
         #endregion
         [HttpPost]
         public JsonResult Check(int id, bool status)

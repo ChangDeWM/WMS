@@ -13,7 +13,7 @@ namespace WMS.Account.Contract
         UserClassInfo GetUser(int userId);
         IEnumerable<UserClassInfo> GetUserList(UserRequest request = null);
         void SaveUser(UserClassInfo user);
-
+        bool EditUserAttr(int userId, string filedName, object filedValue);
         bool CheckUser(int userId, bool checkStatus);
         void SaveTempUser();
         void DeleteUser(List<int> ids);
@@ -23,5 +23,11 @@ namespace WMS.Account.Contract
 
         List<WMS.Account.Contract.MenuInfo> GetMenuList(int userId);
         List<WMS.Account.Contract.MenuInfo> GetSecondLevelMenu();
+
+        #region  企业和部门
+        Dictionary<int, string> GetEnterpriseList();
+
+        List<EnterpriseInfo> GetEnterpriseDict();
+        #endregion
     }
 }

@@ -101,4 +101,20 @@ namespace WMS.Account.Contract
         public string ActionName { set; get; }
         public string ActionTag { set; get; }
     }
+
+    #region 企业部门
+    public class EnterpriseInfo
+    {
+        public int eId { set; get; }
+        public string eName { set; get; }
+        public List<DepartmentInfo> eDpt { set; get; }
+    }
+
+
+    public class DepartmentInfo
+    {
+        public int DptId { set; get; }
+        public string DptName { set; get; }
+    }
+    #endregion
 }

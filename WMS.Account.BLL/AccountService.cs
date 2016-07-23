@@ -135,6 +135,7 @@ namespace WMS.Account.BLL
                                                       LoginAccount = n.UserAccount,
                                                       ManageLevel = n.ManageLevel,
                                                       NickName = n.NickName,
+                                                      UserName = n.UserName,
                                                       PostId = n.PostId,
                                                       PostName = "",
                                                       Remarks = n.Remarks,
@@ -172,7 +173,8 @@ namespace WMS.Account.BLL
                                                       EnterpriseId = n.EnterpriseId,
                                                       LoginAccount = n.UserAccount,
                                                       ManageLevel = n.ManageLevel,
-                                                      NickName = n.UserName + "(" + n.NickName + ")",
+                                                      NickName = n.NickName,
+                                                      UserName = n.UserName,
                                                       PostId = n.PostId,
                                                       PostName = "",
                                                       Remarks = n.Remarks,
@@ -227,6 +229,45 @@ namespace WMS.Account.BLL
             }
         }
 
+        public bool EditUserAttr(int userId,string filedName,object filedValue)
+        {
+            using (var dbContext = new WmsDbContext())
+            {
+                var user = dbContext.UserInfo.FirstOrDefault(n => n.Id.Equals(userId));
+                if(user != null)
+                {
+                    switch(filedName.ToLower())
+                    {
+                        case "username":
+                            user.UserName = filedValue.ToString();
+                            break;
+                        case "nickname":
+                            user.NickName = filedValue.ToString();
+                            break;
+                        case "password":
+                            user.Password = filedValue.ToString();
+                            break;
+                        case "status":
+                            user.Status = Convert.ToInt32(filedValue);
+                            break;
+                        case "telephone":
+                            user.Telephone = filedValue.ToString();
+                            break;
+                        case "enterpriseid":
+                            user.EnterpriseId = Convert.ToInt32(filedValue);
+                            break;
+                        case "depid":
+                            user.DepId = Convert.ToInt32(filedValue);
+                            break;
+                        default :
+                            break;
+                    }
+                    return dbContext.SaveChanges() > 0;
+                }
+                return false;
+            }
+        }
+
         public bool CheckUser(int userId,bool checkStatus)
         {
             int stauts = checkStatus ? 0 : 1;
@@ -236,8 +277,9 @@ namespace WMS.Account.BLL
                 if(rows != null)
                 {
                     rows.Status = stauts;
+                    return dbContext.SaveChanges() > 0;
                 }
-                return dbContext.SaveChanges()>0;
+                return false;
                 //dbContext.UserInfo.Update(n => n.Id.Equals(userId), u => new UserInfo{ u.Status = stauts});
             }
         }
@@ -375,12 +417,43 @@ namespace WMS.Account.BLL
             }
         }
 
+        #region  企业和部门
+        public Dictionary<int,string> GetEnterpriseList()
+        {
+            using (var dbContext = new WmsDbContext())
+            {
+                var list = dbContext.Enterprise.Select(n => new { n.Id, n.EnterpriseName }).ToList().OrderBy(n=>n.EnterpriseName);
+                Dictionary<int, string> enterpirseList = new Dictionary<int, string>();
+                foreach(var l in list)
+                {
+                    enterpirseList.Add(l.Id, l.EnterpriseName);
+                }
+                return enterpirseList;
+            }
+        }
+
+        public List<EnterpriseInfo> GetEnterpriseDict()
+        {
+            using (var dbContext = new WmsDbContext())
+            {
+                var linq = from n in dbContext.Enterprise
+                           select new EnterpriseInfo
+                           {
+                               eId = n.Id,
+                               eName = n.EnterpriseName,
+                               eDpt = (from m in dbContext.Department where m.EnterpriseId.Equals(n.Id) select new DepartmentInfo { DptId = m.Id, DptName = m.DepName }).ToList()
+                           };
+                return linq.ToList();
+            }
+        }
+        #endregion
+
         #region 授权
-        
+
         #endregion
 
         #region 菜单
-       
+
         #endregion
 
     }

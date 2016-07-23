@@ -17,6 +17,11 @@ namespace WMS.Web.Admin.Controllers
 
         public ActionResult Index()
         {
+            var security_key = Cookie.GetValue(ConstStr.AppSessionId);
+            //清除Cache
+            UserContext.RemoveAllUserInfo(security_key);
+            //清除Cookie
+            Cookie.Remove(ConstStr.AppSessionId);
             return View(); 
         }
 

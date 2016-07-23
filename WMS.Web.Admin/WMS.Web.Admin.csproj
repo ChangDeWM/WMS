@@ -543,8 +543,10 @@
     <Content Include="Content\font-awesome\src\_layouts\base.html" />
     <Content Include="Content\font-awesome\src\_layouts\icon.html" />
     <Content Include="Content\ie_update.jpg" />
+    <Content Include="Content\jquery.thickbox.css" />
     <Content Include="Content\layout.css" />
     <Content Include="Content\loader.gif" />
+    <Content Include="Content\loadingAnimation.gif" />
     <Content Include="Content\logo.png" />
     <Content Include="Content\sidebar-menu\sidebar-menu.css" />
     <Content Include="Content\sidebar-menu\sidebar-menu.js" />
@@ -803,12 +805,14 @@
     <Content Include="Areas\Sys\Views\User\_partialUser.cshtml" />
     <Content Include="Areas\Sys\Views\User\Index - 复制.cshtml" />
     <Content Include="Areas\Sys\Views\User\Edit.cshtml" />
+    <Content Include="Areas\Sys\Views\User\Create.cshtml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Scripts\bootstrap-tab.js" />
     <Content Include="Scripts\common.js" />
     <Content Include="Scripts\context.js" />
     <Content Include="Scripts\jNotify.jquery.js" />
     <Content Include="Scripts\jquery.cookie.js" />
+    <Content Include="Scripts\jquery.thickbox.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\json2.js" />

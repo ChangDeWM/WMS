@@ -37,9 +37,11 @@ namespace WMS.Web
 
         public static void RemoveAllUserInfo(string security_key)
         {
+            if (String.IsNullOrEmpty(security_key)) return;
             var user = GetUserInfoByRedis(security_key);
             RedisCache.Remove(String.Format("User_{0}", security_key));
-            RedisCache.Remove(String.Format("Login_{0}_{1}", user.UserId, user.LoginAccount));
+            if(user != null)
+                RedisCache.Remove(String.Format("Login_{0}_{1}", user.UserId, user.LoginAccount));
         }
         public static void RemoveUserInfoByRedis(string security_key)
         {

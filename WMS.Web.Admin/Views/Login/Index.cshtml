@@ -18,7 +18,7 @@
     <script src="/Scripts/jquery-1.9.1.min.js"></script>
     <script src="/Scripts/jquery.unobtrusive-ajax.js"></script>
     <script src="/Scripts/jquery.validate.min.js"></script>
-    <link href="~/Content/toastr/toastr.min.css" rel="stylesheet" />
+    <link href="~/Content/toastr/toastr.css" rel="stylesheet" />
     <script src="~/Content/toastr/toastr.min.js"></script>
     <script type="text/javascript">
         function LoginSystem(data) {
@@ -32,6 +32,7 @@
                 }
                 else
                 {
+                    toastr.error(loginInfo[1]);
                     setTimeout(function () {
                         $("#msgtip").html(loginInfo[1]).attr("style", "font-size:14px; color:#FFFFFF;").show(1000);
                     }, 300);
@@ -40,12 +41,10 @@
         }
         function CheckInput()
         {
-            toastr.success("22222", "11111111111111");
-            //showTips('123');
-            //return false;
             var username = $("#username").val();
             if (username == null || username == "")
             {
+                toastr.error("请输入登录账号");
                 $("#msgtip").html("请输入登录账号").attr("style", "font-size:14px; color:#FFCCFF;");
                 setTimeout(function () {
                     $("#msgtip").html("请输入登录账号").attr("style", "font-size:14px; color:#FFFFFF;");
@@ -54,6 +53,7 @@
             }
             var username = $("#password").val();
             if (username == null || username == "") {
+                toastr.error("请输入登录密码");
                 $("#msgtip").html("请输入登录密码").attr("style", "font-size:14px; color:#FFCCFF;");
                 setTimeout(function () {
                     $("#msgtip").html("请输入登录密码").attr("style", "font-size:14px; color:#FFFFFF;");
