@@ -115,6 +115,7 @@ namespace WMS.Account.Contract
     {
         public int DptId { set; get; }
         public string DptName { set; get; }
+        public int DptPId { set; get; }
     }
     #endregion
 }

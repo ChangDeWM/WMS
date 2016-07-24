@@ -83,16 +83,7 @@
             }
         }
 
-
-        @*var enterpriseArr = [];
-        var enterpriseInfo = '@ViewData["EnterpriseInfo"]';
-        enterpriseInfo = enterpriseInfo.replace(/&quot;/g, '"');
-        var jsonEnterprise = eval('(' + enterpriseInfo + ')');
-        for (i in jsonEnterprise)
-        {
-            enterpriseArr.push({ value: i, text: jsonEnterprise[i] });
-        }*@
-
+        var currentValue = '@Model.EnterpriseId';
         $('#enterpriseid').editable({
             url: postUrl,
             pk: tokenId,
@@ -100,8 +91,22 @@
             name: 'enterpriseid',
             value: '@Model.EnterpriseId',
             source: enterpriseArr,
-            success: function (response) {
-                alert(response);
+            success: function (response,newValue) {
+                alert(newValue);
+
+                if(currentValue == newValue) return;
+                currentValue = newValue;
+						
+                var new_source = (!newValue || newValue == "") ? [] : dptArr[newValue];
+                var city = $('#departmentid').removeAttr('id').get(0);
+                $(city).clone().attr('id', 'city').text('请选择部门').editable({
+                    url: postUrl,
+                    pk: tokenId,
+                    type: 'select',
+                    value : null,
+                    source: new_source
+                }).insertAfter(city);//insert it after previous instance
+                $(city).remove();//remove previous instance
             }
         });
 
@@ -111,7 +116,7 @@
             type: 'select',
             name: 'departmentid',
             value: '@Model.DepartmentId',
-            source: dptArr,
+            source: dptArr[currentValue],
             success: function (response) {
                 alert(response);
             }

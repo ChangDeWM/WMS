@@ -256,7 +256,7 @@ namespace WMS.Account.BLL
                         case "enterpriseid":
                             user.EnterpriseId = Convert.ToInt32(filedValue);
                             break;
-                        case "depid":
+                        case "departmentid":
                             user.DepId = Convert.ToInt32(filedValue);
                             break;
                         default :
@@ -441,7 +441,11 @@ namespace WMS.Account.BLL
                            {
                                eId = n.Id,
                                eName = n.EnterpriseName,
-                               eDpt = (from m in dbContext.Department where m.EnterpriseId.Equals(n.Id) select new DepartmentInfo { DptId = m.Id, DptName = m.DepName }).ToList()
+                               eDpt = (from m in dbContext.Department 
+                                       where m.EnterpriseId.Equals(n.Id) 
+                                       select new DepartmentInfo
+                                       { DptId = m.Id, DptName = m.DepName,DptPId=m.PId }
+                                       ).ToList()
                            };
                 return linq.ToList();
             }
