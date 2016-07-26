@@ -22,32 +22,6 @@ namespace WMS.Account.Contract
         [EnumTitle("管理角色")]
         AccountManage_Role = 102,
 
-        [EnumTitle("CMS管理文章")]
-        CmsManage_Article = 201,
-
-        [EnumTitle("CMS管理文章频道")]
-        CmsManage_Channel = 202,
-
-
-        [EnumTitle("CRM管理来访来电")]
-        CrmManage_VisitRecord = 301,
-
-        [EnumTitle("CRM客户管理")]
-        CrmManage_Customer = 302,
-
-        [EnumTitle("CRM项目管理")]
-        CrmManage_Project = 303,
-
-        [EnumTitle("CRM查看统计信息")]
-        CrmManage_Analysis = 304,
-
-
-        [EnumTitle("OA管理员工")]
-        OAManage_Staff = 401,
-
-        [EnumTitle("OA管理部门")]
-        OAManage_Branch = 402,
-
         [EnumTitle("组织结构管理")]
         OAManage_Org = 403,
     }
@@ -91,7 +65,6 @@ namespace WMS.Account.Contract
         public int SortId { set; get; }
         public string IconCode { set; get; }
     }
-
     public class ActionCollection
     {
         public int Id { set; get; }
@@ -101,21 +74,54 @@ namespace WMS.Account.Contract
         public string ActionName { set; get; }
         public string ActionTag { set; get; }
     }
-
-    #region 企业部门
+    #region 企业部门,行政级别
     public class EnterpriseInfo
+    {
+        public int EnterpriseId { set; get; }
+        public string EnterpriseName { set; get; }
+
+        public string EnterpriseAddress{set;get;}
+        public string ContactUser { set; get; }
+        public string ContactTel { set; get; }
+        public int Status { set; get; }
+    }
+    public class EnterpriseDepartmentInfo
     {
         public int eId { set; get; }
         public string eName { set; get; }
-        public List<DepartmentInfo> eDpt { set; get; }
+        public IList<DepartmentInfo> eDpt { set; get; }
     }
-
 
     public class DepartmentInfo
     {
         public int DptId { set; get; }
         public string DptName { set; get; }
         public int DptPId { set; get; }
+
+        public int DptLevel { get; set; }
+        public IList<DepartmentInfo> DptChild { set; get; }
+    }
+
+    /// <summary>
+    /// 行政级别，1 超级用户 2企业管理员 3部门经理 4部门主管 5管理自身数据
+    /// </summary>
+    public class ManageLevelInfo
+    {
+        public int LevelId { set; get; }
+        public string LevelName { set; get; }
+    }
+    public enum EnumManageLevel
+    {
+        [EnumTitle("超级管理员", IsDisplay = false)]
+        SuperUser=0,
+        [EnumTitle("企业级管理员")]
+        EnterpriseManager=1,
+        [EnumTitle("部长级")]
+        DepartmentManager=2,
+        [EnumTitle("主任级")]
+        DepartmentDirector=3,
+        [EnumTitle("员工级")]
+        Staff=4
     }
     #endregion
 }

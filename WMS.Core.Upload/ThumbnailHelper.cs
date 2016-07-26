@@ -65,5 +65,44 @@ namespace WMS.Core.Upload
             var size = new ThumbnailSize() { Width = width, Height = height, Mode = mode, AddWaterMarker = isaddwatermark, Quality = quality};
             MakeThumbnail(originalImagePath, thumbnailPath, size);
         }
+
+        /// <summary>
+        /// 获取文件类型
+        /// 通过base64过滤后的第一个字符串
+        /// </summary>
+        /// <param name="base64_0"></param>
+        /// <returns></returns>
+        public static string GetExtType(string base64_0)
+        {
+            base64_0 = base64_0.ToLower();
+            switch(base64_0)
+            {
+                    case "data:image/jpg;base64":
+                    return "jpg";
+                case "data:image/jpeg;base64":
+                    return "jpeg";
+                case "data:image/png;base64":
+                    return "png";
+                    case "data:image/gif;base64":
+                    return "gif";
+                    case "data:text/plain":
+                case "data:":
+                    return "txt";
+                default :
+                    return "";
+            }
+            //data:,文本数据
+            //data:text/plain,文本数据
+            //data:text/html,HTML代码
+            //data:text/html;base64,base64编码的HTML代码
+            //data:text/css,CSS代码
+            //data:text/css;base64,base64编码的CSS代码
+            //data:text/javascript,Javascript代码
+            //data:text/javascript;base64,base64编码的Javascript代码
+            //data:image/gif;base64,base64编码的gif图片数据
+            //data:image/png;base64,base64编码的png图片数据
+            //data:image/jpeg;base64,base64编码的jpeg图片数据
+            //data:image/x-icon;base64,base64编码的icon图片数据
+        }
     }
 }

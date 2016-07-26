@@ -48,7 +48,6 @@ namespace WMS.Core.Upload
         public void ProcessRequest(HttpContext context)
         {
             context.Response.Charset = "UTF-8";
-
             byte[] file;
             string localFileName = string.Empty;
             string err = string.Empty;
@@ -56,8 +55,30 @@ namespace WMS.Core.Upload
             string fileFolder = string.Empty;
             string filePath = string.Empty; ;
 
+            var actionType = context.Request.QueryString["action"];
             var disposition = context.Request.ServerVariables["HTTP_CONTENT_DISPOSITION"];
-            if (disposition != null)
+
+            if (actionType != null)
+            {
+                //上传的data:img/png;basee64,格式
+                if (actionType == "base64")
+                {
+                    var base64str = context.Request.Form["url"].ToString();
+                    var imgArr = base64str.Split(',');
+                    //var extType = ThumbnailHelper.GetExtType(imgArr[0]);
+                    byte[] bytes = Convert.FromBase64String(imgArr[1]);
+
+                    var imgName = context.Request.Form["imgname"] ?? "头像上传." + ThumbnailHelper.GetExtType(imgArr[0]);
+
+                    file = bytes;
+                    localFileName = imgName;
+                }
+                else
+                {
+                    file = null;
+                }
+            }
+            else if (disposition != null)
             {
                 // HTML5上传
                 file = context.Request.BinaryRead(context.Request.TotalBytes);
@@ -67,18 +88,11 @@ namespace WMS.Core.Upload
             {
                 HttpFileCollection filecollection = context.Request.Files;
                 HttpPostedFile postedfile = filecollection.Get(this.FileInputName);
-
-                // 读取原始文件名
                 localFileName = Path.GetFileName(postedfile.FileName);
-
-                // 初始化byte长度.
                 file = new Byte[postedfile.ContentLength];
-
-                // 转换为byte类型
                 System.IO.Stream stream = postedfile.InputStream;
                 stream.Read(file, 0, postedfile.ContentLength);
                 stream.Close();
-
                 filecollection = null;
             }
 

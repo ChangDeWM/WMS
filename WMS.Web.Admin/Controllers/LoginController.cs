@@ -52,15 +52,6 @@ namespace WMS.Web.Admin.Controllers
                         String.Format(" CheckUserLogin username:{0} password:{1} Token:{2}", username, password, loginInfo.LoginToken.ToString()), null);
                     //写入Cookie
                     Cookie.Save(ConstStr.AppSessionId, loginInfo.LoginToken.ToString(), 60 * 60 * 2);
-                    //Session[ConstStr.AppSessionId] = loginInfo.LoginToken.ToString();
-                    //UserContext.SetUserInfoByRedis(loginInfo.LoginToken.ToString(), 
-                    //    new UserClassInfo { UserId = loginInfo.UserId, LoginAccount = loginInfo.LoginAccount, 
-                    //        EnterpriseId=1, 
-                    //        EnterpriseName="常德自来水", 
-                    //        DepartmentId=1, 
-                    //        DepartmentName="信息部", 
-                    //        NickName="易建新" });
-                    //return RedirectToAction("Index", "Home");
                     return Content("1");
                 }
                 else

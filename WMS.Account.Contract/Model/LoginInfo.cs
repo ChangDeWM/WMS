@@ -33,7 +33,7 @@ namespace WMS.Account.Contract
         public string ClientIP { get; set; }
         public EnumLoginInfo EnumLoginAccountType { get; set; }
 
-        public UserClassInfo UserClassInfo { set; get; }
+        //public UserClassInfo UserClassInfo { set; get; }
     }
 }
 

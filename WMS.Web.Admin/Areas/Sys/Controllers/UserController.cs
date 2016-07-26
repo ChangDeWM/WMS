@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using Newtonsoft;
 using WMS.Web.Admin.Common;
 using WMS.Account.Contract;
+using WMS.Common.Utility;
 
 namespace WMS.Web.Admin.Areas.Sys.Controllers
 {
@@ -34,30 +35,47 @@ namespace WMS.Web.Admin.Areas.Sys.Controllers
             return View(list);
         }
 
-        #region Edit Create
+        #region Edit Create View
         public ActionResult Create()
         {
+            var user = UserContext.GetUserInfoByRedis(this.LoginInfo.LoginToken);
+            ViewData["dllEnterprise"] = new SelectList(this.AccountService.GetAllEnterpriseList(), "EnterpriseId", "EnterpriseName", user.EnterpriseId);
+            var levelList  = new Dictionary<int, string>
+            {
+                {(int) EnumManageLevel.EnterpriseManager, EnumHelper.GetEnumTitle(EnumManageLevel.EnterpriseManager)},
+                {(int) EnumManageLevel.DepartmentManager, EnumHelper.GetEnumTitle(EnumManageLevel.DepartmentManager)},
+                {(int) EnumManageLevel.DepartmentDirector, EnumHelper.GetEnumTitle(EnumManageLevel.DepartmentDirector)},
+                {(int) EnumManageLevel.Staff, EnumHelper.GetEnumTitle(EnumManageLevel.Staff)},
+            };
+            ViewData["dllManageLevel"] = new SelectList(levelList, "Key", "Value", user.ManageLevel);
+
             var model = new UserClassInfo { Status = 1, Password="123456" };
-            return View(model);
+            return View("Edit",model);
         }
 
         [HttpPost]
         public ActionResult Create(FormCollection collection)
         {
-            var model = new UserClassInfo { Status=1 };
-            this.AccountService.SaveUser(model);
+            var model = new UserClassInfo { Status = 1, Password = "123456" };
 
+            TryUpdateModel(model);
+
+            this.AccountService.SaveUser(model);
             return this.RefreshParent();
         }
 
         public ActionResult Edit(int id)
         {
-            var eList = this.AccountService.GetEnterpriseDict();
-            ViewData["eList"] = Newtonsoft.Json.JsonConvert.SerializeObject(eList);
-
-
-            var enterpriseInfo = this.AccountService.GetEnterpriseList();
-            ViewData["EnterpriseInfo"] = Newtonsoft.Json.JsonConvert.SerializeObject(enterpriseInfo).ToString();
+            var user = UserContext.GetUserInfoByRedis(this.LoginInfo.LoginToken);
+            ViewData["dllEnterprise"] = new SelectList(this.AccountService.GetAllEnterpriseList(), "EnterpriseId", "EnterpriseName", user.EnterpriseId);
+            var levelList = new Dictionary<int, string>
+            {
+                {(int) EnumManageLevel.EnterpriseManager, EnumHelper.GetEnumTitle(EnumManageLevel.EnterpriseManager)},
+                {(int) EnumManageLevel.DepartmentManager, EnumHelper.GetEnumTitle(EnumManageLevel.DepartmentManager)},
+                {(int) EnumManageLevel.DepartmentDirector, EnumHelper.GetEnumTitle(EnumManageLevel.DepartmentDirector)},
+                {(int) EnumManageLevel.Staff, EnumHelper.GetEnumTitle(EnumManageLevel.Staff)},
+            };
+            ViewData["dllManageLevel"] = new SelectList(levelList, "Key", "Value", user.ManageLevel);
             var model = this.AccountService.GetUser(id);
             return View(model);
         }
@@ -72,6 +90,24 @@ namespace WMS.Web.Admin.Areas.Sys.Controllers
             return this.RefreshParent();
         }
 
+        public ActionResult View(int id)
+        {
+            var eList = this.AccountService.GetEnterpriseDict();
+            ViewData["eList"] = Newtonsoft.Json.JsonConvert.SerializeObject(eList);
+            var levelList = new Dictionary<int, string>
+            {
+                {(int) EnumManageLevel.EnterpriseManager, EnumHelper.GetEnumTitle(EnumManageLevel.EnterpriseManager)},
+                {(int) EnumManageLevel.DepartmentManager, EnumHelper.GetEnumTitle(EnumManageLevel.DepartmentManager)},
+                {(int) EnumManageLevel.DepartmentDirector, EnumHelper.GetEnumTitle(EnumManageLevel.DepartmentDirector)},
+                {(int) EnumManageLevel.Staff, EnumHelper.GetEnumTitle(EnumManageLevel.Staff)},
+            };
+            ViewData["mgLevel"] = Newtonsoft.Json.JsonConvert.SerializeObject(levelList);
+
+            var enterpriseInfo = this.AccountService.GetEnterpriseList();
+            ViewData["EnterpriseInfo"] = Newtonsoft.Json.JsonConvert.SerializeObject(enterpriseInfo).ToString();
+            var model = this.AccountService.GetUser(id);
+            return View(model);
+        }
         [HttpPost]
         public JsonResult EidtAttr(int pk, FormCollection collection)
         {
@@ -81,7 +117,11 @@ namespace WMS.Web.Admin.Areas.Sys.Controllers
                 var filedValue = collection["value"].ToString();
                 //var id = collection["pk"].ToString();
                 if (this.AccountService.EditUserAttr(pk, filedName, filedValue))
+                {
+                    var security_key = Cookie.GetValue(WMS.Common.Contract.ConstStr.AppSessionId);
+                    UserContext.RefreshUserInfo(security_key, filedName, filedValue);
                     return new JsonResult { Data = "OK" };
+                }
                 else
                     return new JsonResult { Data = "更新失败！" };
             }

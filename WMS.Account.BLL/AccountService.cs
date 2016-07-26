@@ -78,6 +78,8 @@ namespace WMS.Account.BLL
             {
                 //说明登录成功了,写入缓存
                 RedisCache.Set<UserClassInfo>(String.Format("User_{0}", loginInfo.LoginToken), GetUser(loginInfo.UserId), 60 * 60 * 2);
+                //读取权限信息，写入缓存
+                //TODO:zhangjing
             }
             return loginInfo;
         }
@@ -125,7 +127,7 @@ namespace WMS.Account.BLL
                                                   from en in JoinedEmpEnterprise.DefaultIfEmpty()
                                                   join dpt in dbContext.Department on n.DepId equals dpt.Id into JoinedEmpDept
                                                   from dpt in JoinedEmpDept.DefaultIfEmpty()
-                                                  where n.Id.Equals(userId) && !n.Status.Equals(1)
+                                                  where n.Id.Equals(userId)
                                                   select new UserClassInfo
                                                   {
                                                       DepartmentName = dpt != null ? dpt.DepName : null,
@@ -141,7 +143,8 @@ namespace WMS.Account.BLL
                                                       Remarks = n.Remarks,
                                                       Status = n.Status,
                                                       UserId = n.Id,
-                                                      Mobile = n.Telephone
+                                                      Mobile = n.Telephone,
+                                                      ImgUrl = n.ImgUrl
                                                   };
                 return users.FirstOrDefault();
             }
@@ -191,8 +194,8 @@ namespace WMS.Account.BLL
                 if (!string.IsNullOrEmpty(request.UserName))
                     users = users.Where(u => u.NickName.Contains(request.UserName));
 
-                if (!string.IsNullOrEmpty(request.OrderAsc) && request.OrderAsc.Equals("00"))
-                    return users.OrderBy(n => n.LoginAccount).ToPagedList(request.PageIndex, request.PageSize);
+                //if (!string.IsNullOrEmpty(request.OrderAsc) && request.OrderAsc.Equals("00"))
+                //    return users.OrderBy(n => n.LoginAccount).ToPagedList(request.PageIndex, request.PageSize);
 
                 return users.OrderByDescending(u => u.UserId).ToPagedList(request.PageIndex, request.PageSize);
             }
@@ -202,30 +205,42 @@ namespace WMS.Account.BLL
         {
             using (var dbContext = new WmsDbContext())
             {
-                //if (user.ID > 0)
-                //{
-                //    dbContext.Update<User>(user);
+                if (user.UserId > 0)
+                {
+                    var rows = dbContext.UserInfo.FirstOrDefault(n => n.Id.Equals(user.UserId));
+                    if (rows != null)
+                    {
+                        rows.DepId = user.DepartmentId;
+                        rows.EnterpriseId = user.EnterpriseId;
+                        rows.ImgUrl = user.ImgUrl;
+                        rows.ManageLevel = user.ManageLevel;
+                        rows.NickName = user.NickName;
+                        rows.PostId = (user.PostId != null ? user.PostId.Value : 0);
+                        rows.Remarks = user.Remarks;
+                        rows.Status = user.Status;
+                        rows.Telephone = user.Mobile;
+                        rows.UserAccount = user.LoginAccount;
+                        rows.UserName = user.UserName;
+                    }
+                }
+                else
+                {
+                    var rows = new UserInfo();
+                    rows.DepId = user.DepartmentId;
+                    rows.EnterpriseId = user.EnterpriseId;
+                    rows.ImgUrl = user.ImgUrl;
+                    rows.ManageLevel = user.ManageLevel;
+                    rows.NickName = user.NickName;
+                    rows.PostId = (user.PostId != null ? user.PostId.Value : 0);
+                    rows.Remarks = user.Remarks;
+                    rows.Status = user.Status;
+                    rows.Telephone = user.Mobile;
+                    rows.UserAccount = user.LoginAccount;
+                    rows.UserName = user.UserName;
 
-                //    var roles = dbContext.Roles.Where(r => user.RoleIds.Contains(r.ID)).ToList();
-                //    user.Roles = roles;
-                //    dbContext.SaveChanges();
-                //}
-                //else
-                //{
-                //    var existUser = dbContext.FindAll<User>(u => u.LoginName == user.LoginName);
-                //    if (existUser.Count > 0)
-                //    {
-                //        throw new BusinessException("LoginName", "此登录名已存在！");
-                //    }
-                //    else
-                //    {
-                //        dbContext.Insert<User>(user);
-
-                //        var roles = dbContext.Roles.Where(r => user.RoleIds.Contains(r.ID)).ToList();
-                //        user.Roles = roles;
-                //        dbContext.SaveChanges();
-                //    }
-                //}
+                    dbContext.UserInfo.Add(rows);
+                }
+                dbContext.SaveChanges();
             }
         }
 
@@ -258,6 +273,12 @@ namespace WMS.Account.BLL
                             break;
                         case "departmentid":
                             user.DepId = Convert.ToInt32(filedValue);
+                            break;
+                        case "managelevel":
+                            user.ManageLevel = Convert.ToInt32(filedValue);
+                            break;
+                        case "imgurl":
+                            user.ImgUrl = filedValue.ToString();
                             break;
                         default :
                             break;
@@ -418,6 +439,24 @@ namespace WMS.Account.BLL
         }
 
         #region  企业和部门
+        public IEnumerable<EnterpriseInfo> GetAllEnterpriseList()
+        {
+            using (var dbContext = new WmsDbContext())
+            {
+                IQueryable<EnterpriseInfo> enterpriseInfo = from n in dbContext.Enterprise
+                                                                      where n.Status.Equals(0)
+                                                                      select new EnterpriseInfo
+                                                                      {
+                                                                          EnterpriseId = n.Id,
+                                                                          EnterpriseName = n.EnterpriseName,
+                                                                          ContactTel = n.ContactTel,
+                                                                          ContactUser = n.ContactUser,
+                                                                          EnterpriseAddress = n.EnterpriseAddress,
+                                                                          Status = n.Status
+                                                                      };
+                return enterpriseInfo.ToList();
+            }
+        }
         public Dictionary<int,string> GetEnterpriseList()
         {
             using (var dbContext = new WmsDbContext())
@@ -432,22 +471,89 @@ namespace WMS.Account.BLL
             }
         }
 
-        public List<EnterpriseInfo> GetEnterpriseDict()
+        public List<EnterpriseDepartmentInfo> GetEnterpriseDict()
         {
             using (var dbContext = new WmsDbContext())
             {
-                var linq = from n in dbContext.Enterprise
-                           select new EnterpriseInfo
+                List<EnterpriseDepartmentInfo> rows = (from n in dbContext.Enterprise
+                                                  select new EnterpriseDepartmentInfo
+                                                  {
+                                                      eId = n.Id,
+                                                      eName = n.EnterpriseName
+                                                  }).ToList();
+                foreach (var r in rows)
+                {
+                    r.eDpt = (from m in dbContext.Department
+                             where m.EnterpriseId.Equals(r.eId) && m.DepLevel.Equals(2)
+                             select new DepartmentInfo
+                             {
+                                 DptId = m.Id,
+                                 DptName = m.DepName,
+                                 DptPId = m.PId,
+                                 DptLevel = m.DepLevel
+                             }).ToList();
+                    foreach (var p in r.eDpt)
+                    {
+                        p.DptChild = (from s in dbContext.Department
+                                     where s.PId.Equals(p.DptPId) && s.DepLevel.Equals(3)
+                                     select new DepartmentInfo
+                                     {
+                                         DptId = s.Id,
+                                         DptName = s.DepName,
+                                         DptPId = s.PId,
+                                         DptLevel = s.DepLevel
+                                     }).ToList();
+                    }
+                }
+                return rows;
+
+
+                //var linq = from n in dbContext.Enterprise
+                //           select new EnterpriseInfo
+                //           {
+                //               eId = n.Id,
+                //               eName = n.EnterpriseName,
+                //               eDpt = (from m in dbContext.Department 
+                //                       where m.EnterpriseId.Equals(n.Id) && m.DepLevel.Equals(2)
+                //                       select new DepartmentInfo
+                //                       { DptId = m.Id, DptName = m.DepName,DptPId=m.PId, DptLevel=m.DepLevel,
+                //                        DptChild =(from s in dbContext.Department 
+                //                                   where s.PId.Equals(m.Id) && s.DepLevel.Equals(3)
+                //                                   select new DepartmentInfo
+                //                                   { DptId = s.Id, DptName = s.DepName,DptPId=s.PId, DptLevel=s.DepLevel}
+                //                                   ).ToList() 
+                //                       }).ToList()
+                //           };
+                //return linq.ToList();
+            }
+        }
+
+        public IList<DepartmentInfo> GetDptListByEnterpriseId(int enterpriseId)
+        {
+            using (var dbContext = new WmsDbContext())
+            {
+                var rows = (from n in dbContext.Department
+                           where n.DepLevel.Equals(2) && n.EnterpriseId.Equals(enterpriseId)
+                           select new DepartmentInfo
                            {
-                               eId = n.Id,
-                               eName = n.EnterpriseName,
-                               eDpt = (from m in dbContext.Department 
-                                       where m.EnterpriseId.Equals(n.Id) 
-                                       select new DepartmentInfo
-                                       { DptId = m.Id, DptName = m.DepName,DptPId=m.PId }
-                                       ).ToList()
-                           };
-                return linq.ToList();
+                               DptId = n.Id,
+                               DptName = n.DepName,
+                               DptPId = n.PId,
+                               DptLevel = n.DepLevel,
+                           }).ToList();
+                foreach(var r in rows)
+                {
+                    r.DptChild = (from s in dbContext.Department
+                                  where s.DepLevel.Equals(3) && s.PId.Equals(r.DptId)
+                                  select new DepartmentInfo
+                                  {
+                                      DptId = s.Id,
+                                      DptName = s.DepName,
+                                      DptLevel = s.DepLevel
+                                  }).ToList();
+                }
+                var s1 = rows;
+                return rows.ToList();
             }
         }
         #endregion

@@ -1,6 +1,8 @@
 ﻿@using WMS.Core.Config
 @using WMS.Web
+@using WMS.Account.Contract
 
+@model UserClassInfo
 @{
     Layout = null;
 }
@@ -36,13 +38,14 @@
     <link rel="stylesheet" href="/assets/css/ace-rtl.min.css" />
     <link rel="stylesheet" href="/assets/css/ace-skins.min.css" />
     <link href="/Content/toastr/toastr.min.css" rel="stylesheet" />
+    <link href="/Content/jquery.thickbox.css" rel="stylesheet" />
 
     <script src="/Scripts/jquery-1.9.1.min.js"></script>
 
     <script src="/assets/js/bootstrap.min.js"></script>
     <script src="/Content/sidebar-menu/sidebar-menu.js"></script>
     <script src="/Scripts/bootstrap-tab.js"></script>
-
+    <script src="/Scripts/jquery.thickbox.js"></script>
     <!--[if lte IE 8]>
       <link rel="stylesheet" href="/assets/css/ace-ie.min.css" />
     <![endif]-->
@@ -98,10 +101,10 @@
                 <ul class="nav ace-nav">
                     <li class="light-blue">
                         <a data-toggle="dropdown" href="#" class="dropdown-toggle">
-                            <img class="nav-user-photo" src="/assets/avatars/user.jpg" alt="张三头像" />
+                            <img class="nav-user-photo" src="@(Model.ImgUrl !=null? Model.ImgUrl.ToString().Replace(".","_s."):"/assets/avatars/user.jpg")" alt="@Model.UserName" />
                             <span class="user-info" style="text-align:center;">
-                                @ViewData["User_EnterpriseName"]
-                                <small>@ViewData["User_DepartmentName"]  @ViewData["User_NickName"]</small>
+                                @Model.EnterpriseName
+                                <small>@Model.DepartmentName  @Model.UserName</small>
                             </span>
                             <i class="icon-caret-down"></i>
                         </a>
@@ -114,7 +117,7 @@
                             </li>
 
                             <li>
-                                <a href="#">
+                                <a class="thickbox" title="查看我的资料" href="@Url.Action("View","User",new { area = "Sys",id = Model.UserId })?TB_iframe=true&height=380&width=550">
                                     <i class="icon-user"></i>
                                     个人资料
                                 </a>

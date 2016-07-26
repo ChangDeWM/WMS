@@ -25,9 +25,13 @@ namespace WMS.Account.Contract
         List<WMS.Account.Contract.MenuInfo> GetSecondLevelMenu();
 
         #region  企业和部门
+        IEnumerable<EnterpriseInfo> GetAllEnterpriseList();
+
         Dictionary<int, string> GetEnterpriseList();
 
-        List<EnterpriseInfo> GetEnterpriseDict();
+        List<EnterpriseDepartmentInfo> GetEnterpriseDict();
+
+        IList<DepartmentInfo> GetDptListByEnterpriseId(int enterpriseId);
         #endregion
     }
 }

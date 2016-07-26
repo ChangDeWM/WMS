@@ -26,5 +26,6 @@ namespace WMS.Account.DAL
         public string Remarks { get; set; }
         public int Status { get; set; }
         public int ManageLevel { get; set; }
+        public string ImgUrl { get; set; }
     }
 }

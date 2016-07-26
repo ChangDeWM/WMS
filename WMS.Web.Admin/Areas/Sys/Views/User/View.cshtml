@@ -1,0 +1,330 @@
+﻿@using WMS.Common.Contract
+@using WMS.Account.Contract
+
+@model UserClassInfo
+@{
+    Layout = "~/Views/Shared/_Layout.View.cshtml";
+}
+@section PageSpecificStyleSheetIncludes{
+<link rel="stylesheet" href="/assets/css/bootstrap-editable.css" />
+    <style type="text/css">
+        .row {
+            margin:0px;
+        }
+        body{ background-color:#fff;}
+        .control-label {
+        text-align:right;
+        }
+    </style>
+}
+@section PageSpecificJavascriptIncludes{
+<script src="/assets/js/x-editable/bootstrap-editable.min.js"></script>
+<script src="/assets/js/x-editable/ace-editable.min.js"></script>
+<script src="/assets/js/jquery.maskedinput.min.js"></script>
+<script type="text/javascript">
+    jQuery(function ($) {
+        var postUrl = '/Sys/User/EidtAttr';
+        var tokenId = '@Model.UserId';
+        //editables on first profile page
+        $.fn.editable.defaults.mode = 'inline';
+        $.fn.editableform.loading = "<div class='editableform-loading'><i class='light-blue icon-2x icon-spinner icon-spin'></i></div>";
+        $.fn.editableform.buttons = '<button type="submit" class="btn btn-info editable-submit"><i class="icon-ok icon-white"></i></button>' +
+                                    '<button type="button" class="btn editable-cancel"><i class="icon-remove"></i></button>';
+
+        //editables
+        $('#username').editable({
+            url: postUrl,
+            pk: tokenId,
+            type: 'text',
+            name: 'username',
+            success: function (response) {
+                if (response == "OK") {
+                    toastr.success("您的姓名已修改！");
+                }
+                else {
+                    toastr.error("您的姓名修改失败！");
+                }
+            }
+        });
+        $('#nickname').editable({
+            url: postUrl,
+            pk: tokenId,
+            type: 'text',
+            name: 'nickname',
+            success: function (response) {
+                toastr.success("修改成功！");
+            }
+        });
+        $('#telephone').editable({
+            url: postUrl,
+            pk: tokenId,
+            type: 'text',
+            name: 'telephone',
+            success: function (response) {
+                toastr.success("修改成功！");
+            }
+        });
+
+        var epList = '@ViewData["eList"] ';
+        epList = epList.replace(/&quot;/g, '"');
+        var epArr = eval('(' + epList + ')');
+        var enterpriseArr = [];
+        for (var i = 0; i < epArr.length; i++)
+        {
+            enterpriseArr.push({ value: epArr[i].eId, text: epArr[i].eName });
+        }
+        var currentValue = '@Model.EnterpriseId';
+        $('#enterpriseid').editable({
+            url: postUrl,
+            pk: tokenId,
+            type: 'select',
+            name: 'enterpriseid',
+            value: '@Model.EnterpriseId',
+            source: enterpriseArr,
+            success: function (response,newValue) {
+                toastr.success("所属企业修改成功！");
+
+                if(currentValue == newValue) return;
+                currentValue = newValue;
+
+                InitDptSelect(currentValue);
+            }
+        });
+
+        //管理级别
+        var mgLevelList = '@ViewData["mgLevel"] ';
+        mgLevelList = mgLevelList.replace(/&quot;/g, '"');
+        var mgLevelArr = eval('(' + mgLevelList + ')');
+        var levelArrInfo = [];
+        for (var r in mgLevelArr)
+        {
+            levelArrInfo.push({ value: r, text: mgLevelArr[r] });
+        }
+        $('#managelevel').editable({
+            url: postUrl,
+            pk: tokenId,
+            type: 'select',
+            name: 'managelevel',
+            value: '@Model.ManageLevel',
+            source: levelArrInfo,
+            success: function (response) {
+                toastr.success("行政级别修改成功！");
+            }
+        });
+
+        //$('#signup').editable({
+        //    type: 'date',
+        //    format: 'yyyy-mm-dd',
+        //    viewformat: 'dd/mm/yyyy',
+        //    datepicker: {
+        //        weekStart: 1
+        //    }
+        //});
+
+        //$('#age').editable({
+        //    type: 'spinner',
+        //    name: 'age',
+        //    spinner: {
+        //        min: 16, max: 99, step: 1
+        //    }
+        //});
+
+        // *** editable avatar *** //
+        try {
+            if (/msie\s*(8|7|6)/.test(navigator.userAgent.toLowerCase())) Image.prototype.appendChild = function (el) { }
+            var last_gritter
+            $('#avatar').editable({
+                type: 'image',
+                name: 'avatar',
+                value: null,
+                image: {
+                    btn_choose: '点击上传',
+                    droppable: true,
+                    name: 'avatar',//put the field name here as well, will be used inside the custom plugin
+                    max_size: 1100000,//~1000Kb
+                    on_error: function (code) {//on_error function will be called when the selected file has a problem
+                        if (last_gritter) $.gritter.remove(last_gritter);
+                        if (code == 1) {
+                            toastr.error("请选择 jpg|gif|png 格式！");
+                        } else if (code == 2) {//file size rror
+                            toastr.error("上传图片文件不能超过 1M!");
+                        }
+                        else {//other error
+                        }
+                    },
+                    on_success: function () {
+                        toastr.success("图片加载成功！");
+                    }
+                },
+                url: function (params) {
+                    var deferred = new $.Deferred
+                    var value = $('#avatar').next().find('input[type=hidden]:eq(0)').val();
+                    if (!value || value.length == 0) {
+                        deferred.resolve();
+                        return deferred.promise();
+                    }
+                    setTimeout(function () {
+                        var imgName; var thumb;
+                        if ("FileReader" in window) {
+                            imgName = $('#avatar').next().find('img').parent().attr("data-title");
+                            thumb = $('#avatar').next().find('img').data('thumb');
+                            if (thumb) $('#avatar').get(0).src = thumb;
+                        }
+                        //从这里开始上传到服务器
+                        $.post('/FileUpload.ashx?action=base64', { imgname: imgName, url: thumb }, function (response) {
+                            toastr.success('上传成功！');
+                            var jsonRelust = eval('(' + response + ')');
+                            $.post(postUrl, { name: "imgurl", value: jsonRelust.msg.url, pk: tokenId }, function (response) {
+                                if(response=="OK"){
+                                    toastr.success("修改用户头像成功！");}else { toastr.error(response);}
+                            });
+                        });
+                        deferred.resolve({ 'status': 'OK' });
+                    }, parseInt(Math.random() * 800 + 800))
+                    return deferred.promise();
+                },
+                success: function (response, newValue) {
+                }
+            })
+        } catch (e) { }
+    });
+    $(document).ready(function () {
+        var currentValue = '@Model.EnterpriseId';
+        var dptId = '@Model.DepartmentId';
+        InitDptSelect(currentValue, dptId);
+    });
+
+    function InitDptSelect(a,b)
+    {
+        var postUrl = '/Sys/User/EidtAttr';
+        var tokenId = '@Model.UserId';
+        //成功后初始化部门选项框
+        $.getJSON("/ashx/Sys_User.ashx?action=GetDptList", { eid: a }, function (result) {
+            var dptInfo = [];
+            var dptArr = result; //eval('(' + result + ')');
+            for (var i = 0; i < dptArr.length; i++) {
+                dptInfo.push({ value: dptArr[i].DptId, text: dptArr[i].DptName });
+                if (dptArr[i].DptChild != null) {
+                    for (var j = 0; j < dptArr[i].DptChild.length; j++) {
+                        dptInfo.push({ value: dptArr[i].DptChild[j].DptId, text: "  |-- " + dptArr[i].DptChild[j].DptName });
+                    }
+                }
+            }
+            if (b != null) {
+                $('#departmentid').editable({
+                    url: postUrl,
+                    pk: tokenId,
+                    type: 'select',
+                    name: 'departmentid',
+                    value: '@Model.DepartmentId',
+                    source: dptInfo,
+                    success: function (response) {
+                        toastr.success("所属部门修改成功！");
+                    }
+                });
+            }
+            else {
+                var dpt = $('#departmentid').removeAttr('id').get(0);
+                $(dpt).clone().attr('id', 'dpt').text('请选择部门').editable({
+                    url: postUrl,
+                    pk: tokenId,
+                    type: 'select',
+                    name: 'departmentid',
+                    value: null,
+                    source: dptInfo,
+                    success: function (data) {
+                        toastr.success("所属部门修改成功！");
+                    }
+                }).insertAfter(dpt);//insert it after previous instance
+                $(dpt).remove();//remove previous instance
+            }
+        });
+    }
+</script>
+
+}
+@section MainContent{
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-8">
+            <!-- PAGE CONTENT BEGINS -->
+            <div class="profile-user-info-striped">
+                <div class="profile-info-row">
+                    <div class="profile-info-name">登录账号</div>
+                    <div class="profile-info-value">
+                        <span style="background-color: rgba(0, 0, 0, 0);">@Model.LoginAccount</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-user-info-striped">
+                <div class="profile-info-row">
+                    <div class="profile-info-name">真实姓名</div>
+                    <div class="profile-info-value">
+                        <span class="editable editable-click editable-unsaved" id="username" style="display: inline; background-color: rgba(0, 0, 0, 0);">@Model.UserName</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-user-info-striped">
+                <div class="profile-info-row">
+                    <div class="profile-info-name">昵称</div>
+                    <div class="profile-info-value">
+                        <span class="editable editable-click editable-unsaved" id="nickname" style="display: inline; background-color: rgba(0, 0, 0, 0);">@Model.NickName</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-user-info-striped">
+                <div class="profile-info-row">
+                    <div class="profile-info-name">手机号码</div>
+                    <div class="profile-info-value">
+                        <span class="editable editable-click editable-unsaved" id="telephone" style="display: inline; background-color: rgba(0, 0, 0, 0);">@Model.Mobile</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-user-info-striped">
+                <div class="profile-info-row">
+                    <div class="profile-info-name">所属企业</div>
+                    <div class="profile-info-value">
+                        <span class="editable editable-click editable-unsaved" id="enterpriseid" style="display: inline; background-color: rgba(0, 0, 0, 0);">@Model.EnterpriseName</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-user-info-striped">
+                <div class="profile-info-row">
+                    <div class="profile-info-name">所在部门</div>
+                    <div class="profile-info-value">
+                        <span class="editable editable-click editable-unsaved" id="departmentid" style="display: inline; background-color: rgba(0, 0, 0, 0);">@Model.DepartmentName</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-user-info-striped">
+                <div class="profile-info-row">
+                    <div class="profile-info-name">行政级别</div>
+                    <div class="profile-info-value">
+                        <span class="editable editable-click editable-unsaved" id="managelevel" style="display: inline; background-color: rgba(0, 0, 0, 0);">
+                        @WMS.Common.Utility.EnumHelper.GetEnumTitle((EnumManageLevel)Model.ManageLevel)  </span>
+                    </div>
+                </div>
+            </div>
+            <div class="alert alert-block alert-success" style="font-size:12px; padding-left:10%;">
+                <i class="icon-bullhorn bigger-120 blue"></i> 企业级管理员：可查看所有数据<br />
+                <i class="icon-bell bigger-120 blue"></i> 部长级：可查看部门内所有数据<br />
+                <i class="icon-bell-alt bigger-120 blue"></i> 主任级：部门下级小部门（组），可查看组内所有数据<br />
+                <i class="icon-bell bigger-120 blue"></i> 员工级：只能查看自己的数据和公开数据
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-3">
+            <div style="width:160px;">
+                <span class="profile-picture">
+                    <img id="avatar" class="editable img-responsive editable-click editable-empty" alt="@Model.UserName" src="@(String.IsNullOrEmpty(Model.ImgUrl)?"/assets/avatars/profile-pic.jpg":Model.ImgUrl)" />
+                </span>
+            </div>
+        </div>
+    </div>
+}

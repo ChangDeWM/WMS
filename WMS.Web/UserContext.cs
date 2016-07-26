@@ -76,6 +76,55 @@ namespace WMS.Web
             return null;
         }
 
+        #region refresh user cache
+        /// <summary>
+        /// 通过LoginCache， 更新UserClassInfo Cache
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="loginAccount"></param>
+        public static void RefreshUserInfo(string security_key,string filedName,object filedValue)
+        {
+            var user = GetUserInfoByRedis(security_key);
+            if (user != null)
+            {
+                switch (filedName.ToLower())
+                {
+                    case "username":
+                        user.UserName = filedValue.ToString();
+                        break;
+                    case "nickname":
+                        user.NickName = filedValue.ToString();
+                        break;
+                    case "password":
+                        user.Password = filedValue.ToString();
+                        break;
+                    case "status":
+                        user.Status = Convert.ToInt32(filedValue);
+                        break;
+                    case "telephone":
+                        user.Mobile = filedValue.ToString();
+                        break;
+                    case "managelevel":
+                        user.ManageLevel = Convert.ToInt32(filedValue);
+                        break;
+                    case "imgurl":
+                        user.ImgUrl = filedValue.ToString();
+                        break;
+                    case "enterpriseid":
+                    case "departmentid":
+                        {
+                            //从数据库获取最新的用户信息
+                            user = ServiceContext.Current.AccountService.GetUser(user.UserId);
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+            SetUserInfoByRedis(security_key, user);
+        }
+        #endregion
+
         /// <summary>
         /// 根据链接地址判断是否有权
         /// </summary>
@@ -89,10 +138,10 @@ namespace WMS.Web
             var userInfo = GetUserInfoByRedis(security_key);
             if(userInfo != null)
             {
-                var ckMenu = userInfo.MenuList.Count(n => n.AreaName.Equals(areaName) && n.ControllerName.Equals(controllerName) && n.ActionName.Equals(actionName));
-                if (ckMenu > 0) return true;
-                ckMenu = userInfo.ActionList.Count(n => n.AreaName.Equals(areaName) && n.ControllerName.Equals(controllerName) && n.ActionName.Equals(actionName));
-                if (ckMenu > 0) return true;
+                //var ckMenu = userInfo.MenuList.Count(n => n.AreaName.Equals(areaName) && n.ControllerName.Equals(controllerName) && n.ActionName.Equals(actionName));
+                //if (ckMenu > 0) return true;
+                //ckMenu = userInfo.ActionList.Count(n => n.AreaName.Equals(areaName) && n.ControllerName.Equals(controllerName) && n.ActionName.Equals(actionName));
+                //if (ckMenu > 0) return true;
                 return false;
             }
             return false;
