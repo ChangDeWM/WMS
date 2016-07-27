@@ -9,9 +9,9 @@ namespace WMS.Common.Web.Controls
 {
     public static class CheckBoxListHelper
     {
-        public static MvcHtmlString CheckBoxList(this HtmlHelper helper, string name, bool isHorizon = true)
+        public static MvcHtmlString CheckBoxList(this HtmlHelper helper, string name, bool isHorizon = true, int horizonNum = 1)
         {
-            return CheckBoxList(helper, name, helper.ViewData[name] as IEnumerable<SelectListItem>, new { }, isHorizon);
+            return CheckBoxList(helper, name, helper.ViewData[name] as IEnumerable<SelectListItem>, new { }, isHorizon, horizonNum);
         }
 
         public static MvcHtmlString CheckBoxList(this HtmlHelper helper, string name, IEnumerable<SelectListItem> selectList, bool isHorizon = true)
@@ -28,12 +28,12 @@ namespace WMS.Common.Web.Controls
             return CheckBoxList(helper, id, name, selectList, new { }, isHorizon);
         }
 
-        public static MvcHtmlString CheckBoxList(this HtmlHelper helper, string name, IEnumerable<SelectListItem> selectList, object htmlAttributes, bool isHorizon = true)
+        public static MvcHtmlString CheckBoxList(this HtmlHelper helper, string name, IEnumerable<SelectListItem> selectList, object htmlAttributes, bool isHorizon = true, int horizonNum = 1)
         {
-            return CheckBoxList(helper, name, name, selectList, htmlAttributes, isHorizon);
+            return CheckBoxList(helper, name, name, selectList, htmlAttributes, isHorizon, horizonNum);
         }
 
-        public static MvcHtmlString CheckBoxList(this HtmlHelper helper, string id, string name, IEnumerable<SelectListItem> selectList, object htmlAttributes, bool isHorizon = true)
+        public static MvcHtmlString CheckBoxList(this HtmlHelper helper, string id, string name, IEnumerable<SelectListItem> selectList, object htmlAttributes, bool isHorizon = true, int horizonNum = 1)
         {
             IDictionary<string, object> HtmlAttributes = HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes);
 
@@ -83,7 +83,8 @@ namespace WMS.Common.Web.Controls
                 TagBuilder tagBuilder = new TagBuilder("input");
                 tagBuilder.MergeAttributes<string, object>(newHtmlAttributes);
                 string inputAllHtml = tagBuilder.ToString(TagRenderMode.SelfClosing);
-                string containerFormat = isHorizon ? @"<label> {0}  {1}</label>" : @"<p><label> {0}  {1}</label></p>";
+                var preBit = Math.Ceiling(Convert.ToDouble(100 / horizonNum));
+                string containerFormat = isHorizon ? @"<label style=""width:" + preBit + @"%; float:left;""> {0}  {1}</label>" : @"<p><label> {0}  {1}</label></p>";
                 stringBuilder.AppendFormat(containerFormat,
                    inputAllHtml, selectItem.Text);
             }

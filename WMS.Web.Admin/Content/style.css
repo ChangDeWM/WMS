@@ -1,15 +1,16 @@
 ﻿@charset "utf-8";
 /* CSS Document */
-@import url("layout.css");
-@import url("base.css");
+/*@import url("layout.css");*/
 
 /* =========================全局样式.开始========================= */
-a{ color:#686f7f; text-decoration:none; }
+/*a{ color:#686f7f; text-decoration:none; }
 a:link, a:visited{ color:#2A72C5; text-decoration:none; }
-a:active, a:hover{ color:#0065D9; text-decoration:underline; }
+a:active, a:hover{ color:#0065D9; text-decoration:underline; }*/
 /* =========================全局样式.结束========================= */
 
 /* =========================登录页样式.开始======================= */
+.loginbody{ background:#267cb7; text-align:center; }
+
 .login-wrap{ position:absolute; top:50%; left:50%; margin:-150px auto auto -140px; width:280px; text-align:center; }
 	.login-logo{ margin:0 auto 10px; text-indent:-9999em; width:160px; height:42px; background:url(logo.png) no-repeat; }
 	.login-form .col{ position:relative; padding:10px 0; }
@@ -440,7 +441,7 @@ textarea.input{ width:300px; height:65px; }
 .multi-radio{ display:inline-block; vertical-align:middle; *display:inline; }
 	.multi-radio:after{ clear:both; content:"."; display:block; height:0; visibility:hidden; }
 	.multi-radio .boxwrap{ display:inline-block; vertical-align:middle; *display:inline;}
-	.multi-radio a{ display:inline-block; margin-right:-1px; float:left; padding:5px 15px; height:20px; line-height:20px; border:1px solid #eee; vertical-align:middle; color:#333; font-size:100%; cursor:pointer; white-space:nowrap; text-overflow:ellipsis; }
+	.multi-radio a{ display:inline-block; margin-right:-1px; float:left; padding:5px 15px; height:30px; line-height:20px; border:1px solid #eee; vertical-align:middle; color:#333; font-size:100%; cursor:pointer; white-space:nowrap; text-overflow:ellipsis; }
 	.multi-radio a:hover{ background:#C9E1EF; text-decoration:none; }
 	.multi-radio a:active{ text-decoration:none; }
 	.multi-radio a.selected{ background:#16a0d3; border-color:#1096c7; color:#fff; }
@@ -457,7 +458,7 @@ textarea.input{ width:300px; height:65px; }
 .multi-checkbox{ display:inline-block; vertical-align:middle; }
 	.multi-checkbox:after{ clear:both; content:"."; display:block; height:0; visibility:hidden; }
 	.multi-checkbox .boxwrap{ display:inline-block; vertical-align:middle; }
-	.multi-checkbox a{ display:inline-block; float:left; margin-right:-1px; padding:5px 15px; height:20px; line-height:20px; border:1px solid #eee; vertical-align:middle; color:#333; font-size:100%; cursor:pointer; white-space:nowrap; text-overflow:ellipsis; }
+	.multi-checkbox a{ display:inline-block; float:left; margin-right:-1px; padding:5px 15px; height:30px; line-height:20px; border:1px solid #eee; vertical-align:middle; color:#333; font-size:100%; cursor:pointer; white-space:nowrap; text-overflow:ellipsis; }
 	.multi-checkbox a:hover{ background:#C9E1EF; text-decoration:none; }
 	.multi-checkbox a:active{ text-decoration:none; }
 	.multi-checkbox a.selected{ background:#16a0d3; border-color:#1096c7; color:#fff; }
@@ -473,11 +474,11 @@ textarea.input{ width:300px; height:65px; }
 /*下拉菜单*/
 .single-select{ position:relative; display:inline-block; margin-right:5px; vertical-align:middle; cursor:pointer; *float:left; }
 	.single-select .boxwrap{ display:inline-block; vertical-align:middle; }
-	.single-select .select-tit{ position:relative; display:block; padding:5px 38px 5px 10px; min-width:40px; line-height:20px; height:20px; border:solid 1px #eee; text-decoration:none; background:#fff; white-space:nowrap; word-break:break-all; }
-	.single-select .select-tit span{ display:inline-block; color:#333; font-size:12px; vertical-align:middle; }
-	.single-select .select-tit i{ position:absolute; right:0; top:0; display:block; width:28px; height:100%; border-left:1px solid #eee; background:url(skin_icons.png) 7px -189px no-repeat #fafafa; }
+	.single-select .select-tit{ position:relative; display:block; padding:5px 38px 5px 10px; min-width:40px; line-height:20px; height:30px; border:solid 1px #d5d5d5; border-radius:3px; text-decoration:none; background:#fff; white-space:nowrap; word-break:break-all; }
+	.single-select .select-tit span{ display:inline-block; color:#858585; font-size:12px; /*vertical-align:middle;*/ }
+	.single-select .select-tit i{ position:absolute; right:0; top:0; display:block; width:28px; height:100%; border-left:1px solid #d5d5d5; background:url(skin_icons.png) 7px -189px no-repeat #fafafa; }
 	.single-select .select-items{ display:none; position:absolute; left:0; top:45px; /*overflow:hidden;*/ }
-	.single-select .select-items ul{ position:relative; padding:5px; min-width:120px; max-height:280px; border:1px solid #eee; background:#fff; overflow-y:auto; overflow-x:hidden; }
+	.single-select .select-items ul{ margin:0px; position:relative; padding:5px; min-width:120px; max-height:280px; border:1px solid #d5d5d5; border-radius:3px; background:#fff; overflow-y:auto; overflow-x:hidden; }
 	.single-select .select-items ul li{ display:block; padding:4px 10px; line-height:20px; font-size:12px; color:#666; white-space:nowrap; cursor:pointer; }
 	.single-select .select-items ul li:hover{ color:#fff; text-decoration:none; background:#16a0d3; }
 	.single-select .select-items ul li.selected{ color:#fff; background:#16a0d3; }

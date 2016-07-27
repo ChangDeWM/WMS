@@ -9,6 +9,7 @@ namespace WMS.Account.Contract
         public string LoginAccount { get; set; }
         public string Mobile { get; set; }
         public string UserName { set; get; }
+        public int? MgLevel { set; get; }
         public string OrderAsc { set; get; }
     }
 

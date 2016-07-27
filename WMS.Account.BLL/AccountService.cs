@@ -194,6 +194,9 @@ namespace WMS.Account.BLL
                 if (!string.IsNullOrEmpty(request.UserName))
                     users = users.Where(u => u.NickName.Contains(request.UserName));
 
+                if (request.MgLevel.HasValue)
+                    users = users.Where(u => u.ManageLevel.Equals(request.MgLevel.Value));
+
                 //if (!string.IsNullOrEmpty(request.OrderAsc) && request.OrderAsc.Equals("00"))
                 //    return users.OrderBy(n => n.LoginAccount).ToPagedList(request.PageIndex, request.PageSize);
 

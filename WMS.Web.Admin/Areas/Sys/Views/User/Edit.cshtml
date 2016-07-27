@@ -1,4 +1,5 @@
 ﻿@using WMS.Common.Contract
+@using WMS.Common.Web.Controls
 @using WMS.Account.Contract
 
 @model UserClassInfo
@@ -6,6 +7,7 @@
     Layout = "~/Views/Shared/_Layout.Edit.cshtml";
 }
 @section PageSpecificStyleSheetIncludes{
+<link href="/Content/style.css" rel="stylesheet" />
     <style type="text/css">
         .row {
             margin: 0px;
@@ -24,6 +26,7 @@
 }
 @section PageSpecificJavascriptIncludes{
 <script src="/Scripts/zj.select.common.js"></script>
+<script src="/Scripts/common.js"></script>
     <script type="text/javascript">
     $(document).ready(function () {
         var eId = $("#EnterpriseId").val();
@@ -64,6 +67,34 @@
                         </div>
                     </div>
                 }
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label no-padding-right">真实姓名:</label>
+                    <div class="col-sm-9">
+                        <div class="rule-single-select">
+                            @Html.DropDownListFor(m => m.EnterpriseId, (SelectList)ViewData["dllEnterprise"], "  ", new { @class = "col-xs-10 col-sm-5", @onchange = "EnterpriseChange(this.value,'DepartmentId');" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label no-padding-right">状态:</label>
+                    <div class="col-sm-9">
+                        <div class="rule-multi-radio">
+                            @Html.RadioBoxList("enterpirse", (SelectList)ViewData["dllEnterprise"])
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label no-padding-right">评论:</label>
+                    <div class="col-sm-9">
+                        <div class="rule-multi-checkbox">
+                            @Html.CheckBoxList("RoleIds", false, 4)
+                        </div>
+                    </div>
+                </div>
+
                 <div class="form-group">
                     <label class="col-sm-3 control-label no-padding-right">真实姓名:</label>
                     <div class="col-sm-9">
@@ -111,12 +142,12 @@
                     <i class="icon-bell bigger-120 blue"></i> 员工级：只能查看自己的数据和公开数据
                 </div>
             </div>
-        </div>
+                </div>
 
-        <div class="col-xs-12 col-sm-3 center">
-            <span class="profile-picture">
-                <img id="avatar" class="editable img-responsive editable-click editable-empty" alt="@Model.UserName" src="@(!String.IsNullOrEmpty(Model.ImgUrl)?Model.ImgUrl:"/assets/avatars/profile-pic.jpg")" />
-            </span>
-        </div>
-    </div>
+                <div class="col-xs-12 col-sm-3 center">
+                    <span class="profile-picture">
+                        <img id="avatar" class="editable img-responsive editable-click editable-empty" alt="@Model.UserName" src="@(!String.IsNullOrEmpty(Model.ImgUrl)?Model.ImgUrl:"/assets/avatars/profile-pic.jpg")" />
+                    </span>
+                </div>
+            </div>
 }

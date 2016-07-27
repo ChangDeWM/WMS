@@ -6,6 +6,7 @@
 @using WMS.Web;
 
 @section PageSpecificJavascriptIncludes{
+<script src="/Scripts/common.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             bootbox.setDefaults({ locale: "zh_CN" });
@@ -19,6 +20,7 @@
     Layout = "~/Views/Shared/_LayoutList.cshtml";
 }
 @section PageSpecificStyleSheetIncludes{
+<link href="/Content/style.css" rel="stylesheet" />
     <style type="text/css">
         body {
             background-color: #FFF;
@@ -29,13 +31,13 @@
         .text-right{ text-align:right;}
         .modal-dialog{ width:300px; margin-top:200px;}
     </style> 
-    }
+}
     <div class="row">
         <div class="widget-toolbox padding-12 clearfix" style="border:0px; background-color:#FFF;">
             @*@using (Ajax.BeginForm(null, null, new AjaxOptions { LoadingElementId = "loadDiv", UpdateTargetId = "userDvOrder" },null))*@
             @using (Html.BeginForm(null, null, null, FormMethod.Get, new { id = "search" }))
             {
-                <div class="col-sm-7">
+                <div class="col-sm-9">
                     <label>
                         <span>登录账号：</span>
                         @Html.TextBox("LoginAccount", null, new { @class = "input-sm", @placeholder="登录账号" })
@@ -48,8 +50,15 @@
                         <span>手机：</span>
                         @Html.TextBox("Mobile", null, new { @class = "input-sm", @placeholder = "手机号码" })
                     </label>
+                    <label>
+                        <span>行政级别：</span>
+                        <div class="rule-single-select">
+                            @Html.DropDownList("MgLevel", (SelectList)ViewData["mgLevel"], "请选择...", new { @class = "col-xs-10 col-sm-5" })
+                        </div>
+                    </label>
+
                 </div>
-                <div class="col-sm-4 text-right">
+                <div class="col-sm-3 text-right">
                     <button type="submit" class="btn btn-sm btn-success"><i class="icon-search"></i> 搜索</button>
                 </div>
             }
@@ -62,9 +71,8 @@
 
         <div class="col-xs-12 padright">
             <div class="table-header">
-                用户信息  @*<a class="btn btn-primary thickbox" title='添加新用户' href="@Url.Action("Create")?TB_iframe=true&height=350&width=500"><i class="icon-plus icon-white"></i> 新增</a>*@
+                用户信息  
                 <a href="@Url.Action("Create")?TB_iframe=true&height=350&width=500" class="myGreenButton thickbox" title='添加新用户'><i class="icon-plus icon-white"></i> 新增</a>
-                @*<a class="myRedButton" id="delete" href="javascript:;"><i class="icon-trash icon-white"></i> 删除</a>*@
 
                 <a class="myRedButton" id="deleteUser" href="javascript:;"><i class="icon-trash icon-white"></i> 删除用户</a>
             </div>

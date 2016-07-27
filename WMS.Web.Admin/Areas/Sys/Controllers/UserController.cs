@@ -7,6 +7,7 @@ using Newtonsoft;
 using WMS.Web.Admin.Common;
 using WMS.Account.Contract;
 using WMS.Common.Utility;
+using WMS.Common.Web;
 
 namespace WMS.Web.Admin.Areas.Sys.Controllers
 {
@@ -16,7 +17,16 @@ namespace WMS.Web.Admin.Areas.Sys.Controllers
         // GET: /Sys/User/ 
         // List
         public ActionResult Index(WMS.Account.Contract.UserRequest request)
-        {            
+        {
+            var levelList = new Dictionary<int, string>
+            {
+                {(int) EnumManageLevel.EnterpriseManager, EnumHelper.GetEnumTitle(EnumManageLevel.EnterpriseManager)},
+                {(int) EnumManageLevel.DepartmentManager, EnumHelper.GetEnumTitle(EnumManageLevel.DepartmentManager)},
+                {(int) EnumManageLevel.DepartmentDirector, EnumHelper.GetEnumTitle(EnumManageLevel.DepartmentDirector)},
+                {(int) EnumManageLevel.Staff, EnumHelper.GetEnumTitle(EnumManageLevel.Staff)},
+            };
+            ViewData["mgLevel"] = new SelectList(levelList, "Key", "Value", request.MgLevel);
+
             var list = this.AccountService.GetUserList(request);
             if (Request.IsAjaxRequest())
             {
@@ -76,6 +86,9 @@ namespace WMS.Web.Admin.Areas.Sys.Controllers
                 {(int) EnumManageLevel.Staff, EnumHelper.GetEnumTitle(EnumManageLevel.Staff)},
             };
             ViewData["dllManageLevel"] = new SelectList(levelList, "Key", "Value", user.ManageLevel);
+
+            this.ViewBag.RoleIds = new SelectList(levelList, "Key", "Value", user.ManageLevel);
+
             var model = this.AccountService.GetUser(id);
             return View(model);
         }
